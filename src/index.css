@@ -1347,3 +1347,139 @@ body {
 [data-theme='terminal'] .dashboard-title {
   font-family: var(--font-ui, 'Share Tech Mono', monospace);
 }
+
+/* Share card export */
+.share-card-export {
+  width: 420px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.share-card-footer-url {
+  margin-top: 1rem;
+  font-size: 0.68rem;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.share-card-exporter-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.share-export-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.share-card-actions-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Export toast */
+.export-status-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  max-width: min(420px, calc(100vw - 2rem));
+}
+
+.export-status-success {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.export-status-error {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.export-status-loading {
+  border-color: var(--border-active);
+}
+
+.spin-icon {
+  animation: spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-icon {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+/* Social preview page */
+.social-preview-page {
+  min-height: 100vh;
+  background: var(--bg-main);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+}
+
+.social-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-sidebar);
+}
+
+.social-preview-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 3rem;
+  gap: 1.5rem;
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.social-preview-intro {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.social-preview-card-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.social-preview-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.social-preview-url {
+  font-size: 0.7rem;
+  color: var(--text-dark);
+  font-family: 'Share Tech Mono', monospace;
+  word-break: break-all;
+  text-align: center;
+  max-width: 100%;
+}

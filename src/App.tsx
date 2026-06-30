@@ -4,14 +4,20 @@ import { LandingPage } from './components/LandingPage';
 import { PrankBuilder } from './components/PrankBuilder';
 import { PrankRuntime } from './components/PrankRuntime';
 import { AnimatedPageTransition } from './components/shared/AnimatedPageTransition';
+import { SocialMetadataManager } from './components/social/SocialMetadataManager';
+import { SocialPreviewPage } from './components/social/SocialPreviewPage';
 import { PrankConfig } from './types/prank';
-import { DEFAULT_CONFIG, decodeConfig, normalizeConfig } from './utils/url';
+import { DEFAULT_CONFIG, decodeConfig, normalizeConfig, generateShareUrl } from './utils/url';
+import { getSocialPreviewUrl } from './utils/socialMetadata';
 import { usePrankStorage } from './context/LocalStorageContext';
 import { useTheme } from './context/ThemeProvider';
 
+type AppView = 'landing' | 'builder' | 'runtime' | 'social-preview';
+
 export default function App() {
-  const [view, setView] = useState<'landing' | 'builder' | 'runtime'>('landing');
+  const [view, setView] = useState<AppView>('landing');
   const [activeConfig, setActiveConfig] = useState<PrankConfig>(DEFAULT_CONFIG);
+  const [shareUrl, setShareUrl] = useState('');
   const [preferDraft, setPreferDraft] = useState(false);
   const { history, lastPrank } = usePrankStorage();
   const { settings } = useTheme();
@@ -19,11 +25,19 @@ export default function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const p = params.get('p');
+    const mode = params.get('mode');
+
     if (p) {
       const decoded = decodeConfig(p);
       if (decoded) {
         setActiveConfig(decoded);
-        setView('runtime');
+        setShareUrl(generateShareUrl(decoded));
+
+        if (mode === 'social') {
+          setView('social-preview');
+        } else {
+          setView('runtime');
+        }
       }
     }
   }, []);
@@ -48,6 +62,7 @@ export default function App() {
       );
       setPreferDraft(true);
     }
+    setShareUrl('');
     setView('builder');
   };
 
@@ -55,32 +70,73 @@ export default function App() {
     if (window.location.search) {
       window.history.pushState({}, '', window.location.pathname);
     }
+    setShareUrl('');
     setView('landing');
   };
 
   const handleLaunchPrank = (config: PrankConfig) => {
     setActiveConfig(config);
+    setShareUrl(generateShareUrl(config));
     setView('runtime');
   };
 
+  const handleOpenSocialPreview = (config: PrankConfig) => {
+    setActiveConfig(config);
+    const url = generateShareUrl(config);
+    setShareUrl(url);
+    window.history.pushState({}, '', getSocialPreviewUrl(config));
+    setView('social-preview');
+  };
+
+  const metadataConfig =
+    view === 'runtime' || view === 'social-preview' || view === 'builder'
+      ? activeConfig
+      : null;
+
+  const metadataShareUrl =
+    shareUrl || (metadataConfig ? generateShareUrl(metadataConfig) : undefined);
+
   if (view === 'runtime') {
-    return <PrankRuntime config={activeConfig} onExit={handleNavigateHome} />;
+    return (
+      <SocialMetadataManager config={activeConfig} shareUrl={metadataShareUrl}>
+        <PrankRuntime config={activeConfig} onExit={handleNavigateHome} />
+      </SocialMetadataManager>
+    );
+  }
+
+  if (view === 'social-preview') {
+    return (
+      <SocialMetadataManager config={activeConfig} shareUrl={metadataShareUrl}>
+        <SocialPreviewPage
+          config={activeConfig}
+          onOpenPrank={() => setView('runtime')}
+          onNavigateHome={handleNavigateHome}
+        />
+      </SocialMetadataManager>
+    );
   }
 
   return (
-    <AppLayout onNavigateHome={handleNavigateHome}>
-      <AnimatedPageTransition viewKey={view}>
-        {view === 'landing' ? (
-          <LandingPage onCreatePrank={handleCreatePrank} history={history} />
-        ) : (
-          <PrankBuilder
-            initialConfig={activeConfig}
-            preferDraft={preferDraft}
-            onNavigateHome={handleNavigateHome}
-            onLaunchPrank={handleLaunchPrank}
-          />
-        )}
-      </AnimatedPageTransition>
-    </AppLayout>
+    <SocialMetadataManager
+      config={view === 'builder' ? activeConfig : null}
+      shareUrl={view === 'builder' ? metadataShareUrl : undefined}
+    >
+      <AppLayout onNavigateHome={handleNavigateHome}>
+        <AnimatedPageTransition viewKey={view}>
+          {view === 'landing' ? (
+            <LandingPage onCreatePrank={handleCreatePrank} history={history} />
+          ) : (
+            <PrankBuilder
+              initialConfig={activeConfig}
+              preferDraft={preferDraft}
+              onNavigateHome={handleNavigateHome}
+              onLaunchPrank={handleLaunchPrank}
+              onOpenSocialPreview={handleOpenSocialPreview}
+              onShareUrlChange={setShareUrl}
+            />
+          )}
+        </AnimatedPageTransition>
+      </AppLayout>
+    </SocialMetadataManager>
   );
 }

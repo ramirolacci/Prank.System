@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0b10"/>
+      <stop offset="100%" style="stop-color:#1a1035"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="80" y="80" width="1040" height="470" rx="24" fill="rgba(20,22,36,0.85)" stroke="rgba(139,92,246,0.4)" stroke-width="2"/>
+  <text x="120" y="160" fill="#06b6d4" font-family="system-ui,sans-serif" font-size="28" font-weight="700" letter-spacing="2">PRANKFORGE</text>
+  <text x="120" y="240" fill="#ffffff" font-family="system-ui,sans-serif" font-size="52" font-weight="800">Bromas visuales inofensivas</text>
+  <text x="120" y="310" fill="#9ca3af" font-family="system-ui,sans-serif" font-size="28">Creá simulaciones y compartilas por WhatsApp</text>
+  <rect x="120" y="360" width="320" height="56" rx="12" fill="url(#accent)"/>
+  <text x="200" y="398" fill="#ffffff" font-family="system-ui,sans-serif" font-size="22" font-weight="700">100% simulación · Salida segura</text>
+  <text x="120" y="480" fill="#6b7280" font-family="system-ui,sans-serif" font-size="22">prankforge.app</text>
+</svg>

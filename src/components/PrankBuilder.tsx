@@ -32,6 +32,8 @@ interface PrankBuilderProps {
   preferDraft?: boolean;
   onNavigateHome: () => void;
   onLaunchPrank: (config: PrankConfig) => void;
+  onOpenSocialPreview?: (config: PrankConfig) => void;
+  onShareUrlChange?: (url: string) => void;
 }
 
 export const PrankBuilder: React.FC<PrankBuilderProps> = ({
@@ -39,6 +41,8 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
   preferDraft = false,
   onNavigateHome,
   onLaunchPrank,
+  onOpenSocialPreview,
+  onShareUrlChange,
 }) => {
   const [config, setConfig] = useState<PrankConfig>(initialConfig);
   const [shareUrl, setShareUrl] = useState('');
@@ -57,7 +61,8 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
   useEffect(() => {
     setConfig(initialConfig);
     setShareUrl('');
-  }, [initialConfig]);
+    onShareUrlChange?.('');
+  }, [initialConfig, onShareUrlChange]);
 
   useEffect(() => {
     if (preferDraft && draft) {
@@ -70,10 +75,14 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
     return () => clearTimeout(timer);
   }, [config, saveDraft]);
 
-  const handleInputChange = useCallback((field: keyof PrankConfig, value: unknown) => {
-    setConfig((prev) => ({ ...prev, [field]: value }));
-    setShareUrl('');
-  }, []);
+  const handleInputChange = useCallback(
+    (field: keyof PrankConfig, value: unknown) => {
+      setConfig((prev) => ({ ...prev, [field]: value }));
+      setShareUrl('');
+      onShareUrlChange?.('');
+    },
+    [onShareUrlChange]
+  );
 
   const handleTypeChange = (type: PrankType) => {
     const example = getExampleConfig(type);
@@ -85,10 +94,13 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
       message: example.message,
     }));
     setShareUrl('');
+    onShareUrlChange?.('');
   };
 
   const handleGenerateLink = () => {
-    setShareUrl(generateShareUrl(config));
+    const url = generateShareUrl(config);
+    setShareUrl(url);
+    onShareUrlChange?.(url);
   };
 
   const handleSaveToHistory = () => {
@@ -107,17 +119,20 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
     setConfig(item.config);
     setEditingId(item.id);
     setShareUrl('');
+    onShareUrlChange?.('');
   };
 
   const handleEditHistory = (item: HistoryItem) => {
     setConfig(item.config);
     setEditingId(item.id);
     setShareUrl('');
+    onShareUrlChange?.('');
   };
 
   const handleLoadExample = () => {
     setConfig(getExampleConfig(config.prankType));
     setShareUrl('');
+    onShareUrlChange?.('');
   };
 
   const categories = [
@@ -365,6 +380,14 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
               if (!shareUrl) handleGenerateLink();
               onLaunchPrank(config);
             }}
+            onOpenSocialPreview={
+              onOpenSocialPreview
+                ? () => {
+                    if (!shareUrl) handleGenerateLink();
+                    onOpenSocialPreview(config);
+                  }
+                : undefined
+            }
           />
         </div>
 
