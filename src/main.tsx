@@ -4,6 +4,7 @@ import App from './App';
 import { ThemeProvider } from './context/ThemeProvider';
 import { LocalStorageProvider } from './context/LocalStorageContext';
 import { MotionConfigProvider } from './context/MotionConfigProvider';
+import { ServiceWorkerSetup } from './pwa/ServiceWorkerSetup';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -12,6 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <ThemeProvider>
         <LocalStorageProvider>
           <App />
+          <ServiceWorkerSetup />
         </LocalStorageProvider>
       </ThemeProvider>
     </MotionConfigProvider>

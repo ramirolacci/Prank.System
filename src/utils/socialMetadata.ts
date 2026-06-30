@@ -54,11 +54,13 @@ export function buildSocialMetadata(config?: PrankConfig | null, shareUrl?: stri
     config.message?.slice(0, 160) ||
     `Broma visual tipo ${typeLabel}. Tema ${themeLabel}. Simulación inofensiva en el navegador.`;
 
+  const socialPreviewUrl = getSocialPreviewUrl(config);
+
   return {
     title,
     description,
     image: getDefaultOgImageUrl(),
-    url: shareUrl || url,
+    url: shareUrl || socialPreviewUrl,
     themeColor,
     siteName: SITE_NAME,
     type: 'article',

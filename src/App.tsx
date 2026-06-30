@@ -4,8 +4,10 @@ import { LandingPage } from './components/LandingPage';
 import { PrankBuilder } from './components/PrankBuilder';
 import { PrankRuntime } from './components/PrankRuntime';
 import { AnimatedPageTransition } from './components/shared/AnimatedPageTransition';
-import { SocialMetadataManager } from './components/social/SocialMetadataManager';
+import { SocialPreviewMetadata } from './components/social/SocialPreviewMetadata';
 import { SocialPreviewPage } from './components/social/SocialPreviewPage';
+import { MobileSafeLayout } from './components/layout/MobileSafeLayout';
+import { StandaloneModeWrapper } from './components/pwa/StandaloneModeWrapper';
 import { PrankConfig } from './types/prank';
 import { DEFAULT_CONFIG, decodeConfig, normalizeConfig, generateShareUrl } from './utils/url';
 import { getSocialPreviewUrl } from './utils/socialMetadata';
@@ -96,31 +98,22 @@ export default function App() {
   const metadataShareUrl =
     shareUrl || (metadataConfig ? generateShareUrl(metadataConfig) : undefined);
 
-  if (view === 'runtime') {
-    return (
-      <SocialMetadataManager config={activeConfig} shareUrl={metadataShareUrl}>
-        <PrankRuntime config={activeConfig} onExit={handleNavigateHome} />
-      </SocialMetadataManager>
-    );
-  }
+  const content = (() => {
+    if (view === 'runtime') {
+      return <PrankRuntime config={activeConfig} onExit={handleNavigateHome} />;
+    }
 
-  if (view === 'social-preview') {
-    return (
-      <SocialMetadataManager config={activeConfig} shareUrl={metadataShareUrl}>
+    if (view === 'social-preview') {
+      return (
         <SocialPreviewPage
           config={activeConfig}
           onOpenPrank={() => setView('runtime')}
           onNavigateHome={handleNavigateHome}
         />
-      </SocialMetadataManager>
-    );
-  }
+      );
+    }
 
-  return (
-    <SocialMetadataManager
-      config={view === 'builder' ? activeConfig : null}
-      shareUrl={view === 'builder' ? metadataShareUrl : undefined}
-    >
+    return (
       <AppLayout onNavigateHome={handleNavigateHome}>
         <AnimatedPageTransition viewKey={view}>
           {view === 'landing' ? (
@@ -137,6 +130,16 @@ export default function App() {
           )}
         </AnimatedPageTransition>
       </AppLayout>
-    </SocialMetadataManager>
+    );
+  })();
+
+  return (
+    <StandaloneModeWrapper>
+      <MobileSafeLayout>
+        <SocialPreviewMetadata config={metadataConfig} shareUrl={metadataShareUrl}>
+          {content}
+        </SocialPreviewMetadata>
+      </MobileSafeLayout>
+    </StandaloneModeWrapper>
   );
 }

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Terminal, Flame, Settings } from 'lucide-react';
 import { SettingsPanel } from './settings/SettingsPanel';
 import { SettingsUIProvider } from '../context/SettingsUIContext';
+import { PwaInstallBanner } from './pwa/PwaInstallBanner';
+import { PwaInstallButton } from './pwa/PwaInstallBanner';
+import { useStandaloneMode } from '../hooks/useStandaloneMode';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -10,17 +13,12 @@ interface AppLayoutProps {
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { isStandalone } = useStandaloneMode();
 
   return (
     <SettingsUIProvider value={{ openSettings: () => setSettingsOpen(true) }}>
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        background: 'var(--bg-main)',
-      }}
-    >
+    <div className="app-shell">
+      {!isStandalone && <PwaInstallBanner />}
       <header
         className="app-header"
         style={{
@@ -87,6 +85,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {!isStandalone && <PwaInstallButton compact />}
           <button
             type="button"
             onClick={() => setSettingsOpen(true)}
@@ -117,16 +116,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
 
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>{children}</main>
 
-      <footer
-        className="app-footer"
-        style={{
-          background: 'var(--bg-sidebar)',
-          borderTop: '1px solid var(--border)',
-          textAlign: 'center',
-          fontSize: '0.8rem',
-          color: 'var(--text-muted)',
-        }}
-      >
+      <footer className={`app-footer ${isStandalone ? 'standalone-footer-compact' : ''}`}>
         <div
           style={{
             display: 'flex',

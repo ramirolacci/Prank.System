@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0b10"/>
+      <stop offset="100%" stop-color="#1a1035"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="rgba(139,92,246,0.35)" stroke-width="4"/>
+  <path d="M256 120c-20 48-72 72-72 132 0 40 32 72 72 72s72-32 72-72c0-60-52-84-72-132z" fill="url(#flame)"/>
+  <path d="M256 200c-8 24-28 36-28 56 0 16 12 28 28 28s28-12 28-28c0-20-20-32-28-56z" fill="#fff" opacity="0.85"/>
+  <text x="256" y="400" text-anchor="middle" fill="#9ca3af" font-family="system-ui,sans-serif" font-size="36" font-weight="700" letter-spacing="2">PF</text>
+</svg>
