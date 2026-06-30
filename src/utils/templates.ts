@@ -24,7 +24,10 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       fullscreen: true,
       revealText: '¡Tu sistema está al día! ... Mentira, es una broma 😜',
       targetName: '',
-      showReveal: true
+      showReveal: true,
+      appTheme: 'dark',
+      visualIntensity: 'medium',
+      accentColor: '#8b5cf6',
     }
   },
   {
@@ -42,7 +45,10 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       fullscreen: true,
       revealText: '¡Tu computadora está sana y salva! 😂',
       targetName: '',
-      showReveal: true
+      showReveal: true,
+      appTheme: 'dark',
+      visualIntensity: 'medium',
+      accentColor: '#06b6d4',
     }
   },
   {
@@ -60,7 +66,10 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       fullscreen: true,
       revealText: '¡Mac OS recuperado! Todo bajo control 🍏☕',
       targetName: '',
-      showReveal: true
+      showReveal: true,
+      appTheme: 'minimal',
+      visualIntensity: 'medium',
+      accentColor: '#9ca3af',
     }
   },
   {
@@ -78,7 +87,10 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       fullscreen: true,
       revealText: '¡Hackeado! Jaja, broma inofensiva 🤖',
       targetName: '',
-      showReveal: true
+      showReveal: true,
+      appTheme: 'neon',
+      visualIntensity: 'high',
+      accentColor: '#ec4899',
     }
   },
   {
@@ -96,7 +108,10 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       fullscreen: true,
       revealText: '¡Disfruta tu nueva memoria RAM mental! 🧠🐏',
       targetName: '',
-      showReveal: true
+      showReveal: true,
+      appTheme: 'retro',
+      visualIntensity: 'medium',
+      accentColor: '#f59e0b',
     }
   }
 ];

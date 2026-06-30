@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { PrankConfig } from '../types/prank';
 import { ExitButton } from './ExitButton';
 import { FakeUpdateScreen } from './screens/FakeUpdateScreen';
@@ -6,6 +6,7 @@ import { FakeErrorScreen } from './screens/FakeErrorScreen';
 import { GlitchScreen } from './screens/GlitchScreen';
 import { LoadingScreen } from './screens/LoadingScreen';
 import { SurpriseRevealScreen } from './screens/SurpriseRevealScreen';
+import { getAppThemeClass } from '../utils/themes';
 
 interface PrankRuntimeProps {
   config: PrankConfig;
@@ -13,49 +14,81 @@ interface PrankRuntimeProps {
   isPreview?: boolean;
 }
 
-export const PrankRuntime: React.FC<PrankRuntimeProps> = ({ config, onExit, isPreview = false }) => {
+export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
+  config,
+  onExit,
+  isPreview = false,
+}) => {
   const [isRevealed, setIsRevealed] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenBlocked, setFullscreenBlocked] = useState(false);
+  const [showHint, setShowHint] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const hintShownRef = useRef(false);
 
-  // Attempt to request fullscreen when the user first clicks the page
-  const handleScreenClick = () => {
-    if (isPreview) return; // Don't trigger actual fullscreen in preview mode
-    
-    if (config.fullscreen && !document.fullscreenElement) {
-      containerRef.current?.requestFullscreen().catch((err) => {
-        console.warn('Could not enable fullscreen:', err);
-      });
+  const syncFullscreenState = useCallback(() => {
+    const active = !!document.fullscreenElement;
+    setIsFullscreen(active);
+    if (!active) setFullscreenBlocked(false);
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('fullscreenchange', syncFullscreenState);
+    return () => document.removeEventListener('fullscreenchange', syncFullscreenState);
+  }, [syncFullscreenState]);
+
+  useEffect(() => {
+    if (isPreview || !config.fullscreen) return;
+    const timer = setTimeout(() => {
+      if (!hintShownRef.current) {
+        setShowHint(true);
+        hintShownRef.current = true;
+        setTimeout(() => setShowHint(false), 4000);
+      }
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [isPreview, config.fullscreen]);
+
+  const requestFullscreen = useCallback(async () => {
+    if (isPreview || !config.fullscreen || document.fullscreenElement) return;
+
+    try {
+      await containerRef.current?.requestFullscreen();
+      setFullscreenBlocked(false);
+    } catch (err) {
+      console.warn('Could not enable fullscreen:', err);
+      setFullscreenBlocked(true);
     }
+  }, [isPreview, config.fullscreen]);
+
+  const handleScreenClick = () => {
+    requestFullscreen();
   };
 
-  // Clean up fullscreen on component unmount
   useEffect(() => {
     return () => {
       if (document.fullscreenElement) {
-        document.exitFullscreen().catch((err) => {
-          console.warn('Could not exit fullscreen:', err);
-        });
+        document.exitFullscreen().catch(() => {});
       }
     };
   }, []);
+
+  const handleExit = useCallback(() => {
+    if (document.fullscreenElement) {
+      document
+        .exitFullscreen()
+        .then(() => onExit())
+        .catch(() => onExit());
+    } else {
+      onExit();
+    }
+  }, [onExit]);
 
   const handlePrankComplete = () => {
     if (config.showReveal) {
       setIsRevealed(true);
     } else {
-      // If reveal is disabled, exit the prank
       handleExit();
-    }
-  };
-
-  const handleExit = () => {
-    // Make sure we exit fullscreen before returning
-    if (document.fullscreenElement) {
-      document.exitFullscreen()
-        .then(() => onExit())
-        .catch(() => onExit());
-    } else {
-      onExit();
     }
   };
 
@@ -86,27 +119,40 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({ config, onExit, isPr
     }
   };
 
+  const themeClass = getAppThemeClass(config.appTheme);
+
   return (
     <div
       ref={containerRef}
       onClick={handleScreenClick}
+      className={themeClass}
       style={{
-        position: 'fixed',
+        position: isPreview ? 'absolute' : 'fixed',
         inset: 0,
         backgroundColor: '#000000',
-        zIndex: 99999, // Overlay absolute top
-        width: '100vw',
-        height: '100vh',
+        zIndex: isPreview ? 1 : 99999,
+        width: isPreview ? '100%' : '100vw',
+        height: isPreview ? '100%' : '100vh',
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        ['--accent-color' as string]: config.accentColor,
       }}
     >
-      {/* Floating Exit Button (only shown during actual prank simulation, not on reveal screen) */}
-      {!isRevealed && <ExitButton onExit={handleExit} />}
-      
-      {/* Active Prank Screen */}
+      {!isPreview && fullscreenBlocked && config.fullscreen && (
+        <div className="fullscreen-banner">
+          Tu navegador no permite pantalla completa automática. La broma sigue funcionando — usá el
+          botón de salir cuando quieras.
+        </div>
+      )}
+
+      {!isPreview && showHint && config.fullscreen && !isFullscreen && (
+        <div className="fullscreen-hint">Tocá la pantalla para expandir (opcional)</div>
+      )}
+
+      {!isRevealed && !isPreview && <ExitButton onExit={handleExit} />}
+
       {renderActiveScreen()}
     </div>
   );

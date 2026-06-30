@@ -18,10 +18,10 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
     >
       {/* Header */}
       <header
+        className="app-header"
         style={{
           background: 'var(--bg-sidebar)',
           borderBottom: '1px solid var(--border)',
-          padding: '1rem 2rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -82,24 +82,21 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              fontSize: '0.75rem',
-              color: 'var(--text-muted)',
-              background: 'rgba(255,255,255,0.02)',
-              padding: '0.4rem 0.8rem',
-              borderRadius: '8px',
-              border: '1px solid var(--border)',
-            }}
-          >
+        <div className="app-header-badge"
+          style={{
+            alignItems: 'center',
+            gap: '0.4rem',
+            fontSize: '0.75rem',
+            color: 'var(--text-muted)',
+            background: 'rgba(255,255,255,0.02)',
+            padding: '0.4rem 0.8rem',
+            borderRadius: '8px',
+            border: '1px solid var(--border)',
+          }}
+        >
             <Terminal size={14} style={{ color: 'var(--accent)' }} />
             <span>100% Inofensivo</span>
           </div>
-        </div>
       </header>
 
       {/* Main content */}
@@ -109,10 +106,10 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
 
       {/* Footer */}
       <footer
+        className="app-footer"
         style={{
           background: 'var(--bg-sidebar)',
           borderTop: '1px solid var(--border)',
-          padding: '1.5rem 2rem',
           textAlign: 'center',
           fontSize: '0.8rem',
           color: 'var(--text-muted)',

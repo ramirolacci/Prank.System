@@ -1,31 +1,32 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { PRANK_TEMPLATES, PrankTemplate } from '../utils/templates';
-import { Sparkles, Shield, ChevronRight } from 'lucide-react';
+import { getRandomTemplateConfig } from '../utils/examples';
+import { HistoryItem } from '../hooks/useLocalStorage';
+import { SavedPrankList } from './builder/LocalHistoryPanel';
+import { PrankConfig } from '../types/prank';
+import { Sparkles, Shield, ChevronRight, Shuffle, History } from 'lucide-react';
 
 interface LandingPageProps {
-  onCreatePrank: (config?: any) => void;
+  onCreatePrank: (config?: PrankConfig) => void;
+  recentHistory?: HistoryItem[];
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({
+  onCreatePrank,
+  recentHistory = [],
+}) => {
+  const handleRandomPrank = () => {
+    onCreatePrank(getRandomTemplateConfig());
+  };
+
   return (
-    <div
-      style={{
-        padding: '3rem 1.5rem',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4rem',
-        zIndex: 5,
-        position: 'relative',
-      }}
-    >
-      {/* Background glow effects */}
+    <div className="landing-container" style={{ zIndex: 5, position: 'relative' }}>
       <div
         style={{
           position: 'absolute',
-          width: '400px',
-          height: '400px',
+          width: 'min(400px, 80vw)',
+          height: 'min(400px, 80vw)',
           background: 'rgba(139, 92, 246, 0.15)',
           filter: 'blur(120px)',
           borderRadius: '50%',
@@ -33,12 +34,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank }) => {
           left: '10%',
           pointerEvents: 'none',
         }}
-      ></div>
+      />
       <div
         style={{
           position: 'absolute',
-          width: '300px',
-          height: '300px',
+          width: 'min(300px, 60vw)',
+          height: 'min(300px, 60vw)',
           background: 'rgba(6, 182, 212, 0.15)',
           filter: 'blur(120px)',
           borderRadius: '50%',
@@ -46,11 +47,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank }) => {
           right: '5%',
           pointerEvents: 'none',
         }}
-      ></div>
+      />
 
-      {/* Hero Section */}
-      <section style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto', padding: '2rem 0 1rem 0' }}>
-        <div
+      <section style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto', padding: '1rem 0' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -60,103 +62,80 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank }) => {
             background: 'rgba(139, 92, 246, 0.1)',
             border: '1px solid rgba(139, 92, 246, 0.25)',
             color: 'var(--accent)',
-            fontSize: '0.8rem',
+            fontSize: '0.75rem',
             fontWeight: 600,
-            marginBottom: '1.5rem',
+            marginBottom: '1.25rem',
           }}
         >
           <Sparkles size={14} />
-          <span>ESTUDIO CREADOR DE BROMAS TECNOLÓGICAS</span>
-        </div>
-        
-        <h2
+          <span>Bromas visuales · 100% inofensivas</span>
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="landing-hero-title"
           style={{
-            fontSize: '3.25rem',
-            fontWeight: 800,
-            lineHeight: 1.15,
-            letterSpacing: '-1px',
-            marginBottom: '1.5rem',
+            marginBottom: '1.25rem',
             background: 'linear-gradient(to right, #ffffff, #e5e7eb, #9ca3af)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
         >
-          Diseñá Bromas Visuales <br />
-          <span style={{ background: 'linear-gradient(to right, var(--primary), var(--accent))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            Inofensivas e Instantáneas
+          Creá bromas que{' '}
+          <span
+            style={{
+              background: 'linear-gradient(to right, var(--primary), var(--accent))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            se comparten solas
           </span>
-        </h2>
-        
-        <p
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
           style={{
-            fontSize: '1.15rem',
+            fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
             color: 'var(--text-muted)',
             lineHeight: 1.6,
-            marginBottom: '2.5rem',
+            marginBottom: '2rem',
           }}
         >
-          Creá simulaciones realistas de pantallas de error, actualizaciones eternas del sistema y glitches cibernéticos. Generá un link seguro y compartilo con tus amigos.
-        </p>
+          Simulaciones de pantallas de error, actualizaciones eternas y glitches. Generá un link,
+          mandalo por WhatsApp y dejá que la magia pase — siempre con botón de salida visible.
+        </motion.p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => onCreatePrank()}
-            style={{
-              padding: '0.85rem 2rem',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, var(--primary), var(--primary-hover))',
-              color: '#ffffff',
-              fontWeight: 600,
-              fontSize: '1rem',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 20px var(--primary-glow)',
-              transition: 'transform 0.1s ease',
-            }}
-            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.97)')}
-            onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-          >
-            Comenzar desde cero
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap' }}
+        >
+          <button type="button" onClick={() => onCreatePrank()} className="btn-primary">
+            Crear broma nueva
           </button>
-          
-          <a
-            href="#templates"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.85rem 2.0rem',
-              borderRadius: '12px',
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              color: '#ffffff',
-              fontWeight: 500,
-              fontSize: '1rem',
-              border: '1px solid var(--border)',
-              cursor: 'pointer',
-              textDecoration: 'none',
-              transition: 'background-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.06)')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)')}
-          >
-            <span>Ver Plantillas</span>
+          <button type="button" onClick={handleRandomPrank} className="btn-secondary">
+            <Shuffle size={16} />
+            Broma aleatoria
+          </button>
+          <a href="#templates" className="btn-secondary" style={{ textDecoration: 'none' }}>
+            Ver plantillas
             <ChevronRight size={16} />
           </a>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Security Banner */}
-      <section
-        className="glass-card"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1.5rem',
-          padding: '1.5rem 2rem',
-          maxWidth: '850px',
-          margin: '0 auto',
-          border: '1px solid rgba(6, 182, 212, 0.15)',
-        }}
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="glass-card security-banner"
+        style={{ maxWidth: '850px', margin: '0 auto', border: '1px solid rgba(6, 182, 212, 0.15)' }}
       >
         <div
           style={{
@@ -175,50 +154,79 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank }) => {
         </div>
         <div style={{ textAlign: 'left' }}>
           <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.25rem' }}>
-            Compromiso de Seguridad Inofensiva
+            Solo simulación visual
           </h4>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-            La app no recopila credenciales, no realiza phishing ni altera el sistema real. Todo ocurre estrictamente de forma visual en la ventana del navegador. Todas las pantallas de broma contienen un botón para salir inmediatamente.
+            Sin phishing, sin robo de datos, sin alterar tu sistema. Todo ocurre en el navegador y
+            siempre podés salir con un toque.
           </p>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Templates Section */}
-      <section id="templates" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-        <div style={{ textAlign: 'center' }}>
-          <h3 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.5rem' }}>
-            Elegí una Plantilla Rápida
-          </h3>
-          <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)' }}>
-            Hacé clic en cualquier plantilla para cargarla en el editor y personalizarla.
-          </p>
-        </div>
-
-        {/* Template Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '1.5rem',
-          }}
+      {recentHistory.length > 0 && (
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="glass-card"
+          style={{ padding: '1.5rem', maxWidth: '850px', margin: '0 auto', width: '100%' }}
         >
-          {PRANK_TEMPLATES.map((template: PrankTemplate) => (
-            <div
+          <h3
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 800,
+              marginBottom: '0.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}
+          >
+            <History size={20} style={{ color: 'var(--accent)' }} />
+            Tus bromas recientes
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            Guardadas en este dispositivo. Tocá para editarlas.
+          </p>
+          <SavedPrankList
+            items={recentHistory}
+            onLoad={(item) => onCreatePrank(item.config)}
+            onDuplicate={() => {}}
+            onDelete={() => {}}
+            compact
+            readOnly
+          />
+        </motion.section>
+      )}
+
+      <section id="templates" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h3 style={{ fontSize: 'clamp(1.35rem, 4vw, 1.75rem)', fontWeight: 800, marginBottom: '0.5rem' }}>
+            Plantillas listas para usar
+          </h3>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+            Elegí una, personalizala y compartila en segundos.
+          </p>
+        </div>
+
+        <div className="template-grid">
+          {PRANK_TEMPLATES.map((template: PrankTemplate, index) => (
+            <motion.div
               key={template.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 * index }}
               className="glass-card"
               onClick={() => onCreatePrank(template.config)}
               style={{
-                padding: '1.75rem',
+                padding: '1.5rem',
                 textAlign: 'left',
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '1rem',
-                position: 'relative',
                 overflow: 'hidden',
               }}
             >
-              {/* Top Row with icon and launch directly button */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '2rem' }}>{template.icon}</span>
                 <span
@@ -234,20 +242,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank }) => {
                     borderRadius: '6px',
                   }}
                 >
-                  Personalizar
+                  Usar
                   <ChevronRight size={12} />
                 </span>
               </div>
-
               <div>
-                <h4 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.4rem' }}>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.4rem' }}>
                   {template.name}
                 </h4>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
                   {template.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>

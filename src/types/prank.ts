@@ -1,5 +1,9 @@
 export type PrankType = 'fake-update' | 'fake-error' | 'glitch' | 'loading' | 'surprise-reveal';
 
+export type AppTheme = 'dark' | 'neon' | 'terminal' | 'retro' | 'minimal';
+
+export type VisualIntensity = 'low' | 'medium' | 'high';
+
 export interface PrankConfig {
   prankType: PrankType;
   title: string;
@@ -10,5 +14,16 @@ export interface PrankConfig {
   fullscreen: boolean;
   revealText: string;
   targetName: string;
-  showReveal: boolean; // Whether to trigger a surprise reveal after duration
+  showReveal: boolean;
+  appTheme: AppTheme;
+  visualIntensity: VisualIntensity;
+  accentColor: string;
 }
+
+export const PRANK_TYPE_LABELS: Record<PrankType, string> = {
+  'fake-update': 'Actualización falsa',
+  'fake-error': 'Error de sistema',
+  'glitch': 'Glitch / Hacker',
+  'loading': 'Carga infinita',
+  'surprise-reveal': 'Revelación sorpresa',
+};

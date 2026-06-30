@@ -3,14 +3,17 @@ import { AppLayout } from './components/AppLayout';
 import { LandingPage } from './components/LandingPage';
 import { PrankBuilder } from './components/PrankBuilder';
 import { PrankRuntime } from './components/PrankRuntime';
+import { AnimatedPageTransition } from './components/shared/AnimatedPageTransition';
 import { PrankConfig } from './types/prank';
 import { DEFAULT_CONFIG, decodeConfig } from './utils/url';
+import { usePrankStorage } from './context/LocalStorageContext';
 
 export default function App() {
   const [view, setView] = useState<'landing' | 'builder' | 'runtime'>('landing');
   const [activeConfig, setActiveConfig] = useState<PrankConfig>(DEFAULT_CONFIG);
+  const [preferDraft, setPreferDraft] = useState(false);
+  const { history } = usePrankStorage();
 
-  // Parse URL search parameters on mount to check if this is a shared prank link
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const p = params.get('p');
@@ -26,14 +29,15 @@ export default function App() {
   const handleCreatePrank = (initialConfig?: PrankConfig) => {
     if (initialConfig) {
       setActiveConfig(initialConfig);
+      setPreferDraft(false);
     } else {
       setActiveConfig(DEFAULT_CONFIG);
+      setPreferDraft(true);
     }
     setView('builder');
   };
 
   const handleNavigateHome = () => {
-    // Clear URL query parameters when returning to landing page
     if (window.location.search) {
       window.history.pushState({}, '', window.location.pathname);
     }
@@ -45,7 +49,6 @@ export default function App() {
     setView('runtime');
   };
 
-  // If in active runtime mode (shared link or playing builder preview), load full immersion directly
   if (view === 'runtime') {
     return (
       <PrankRuntime
@@ -57,17 +60,21 @@ export default function App() {
 
   return (
     <AppLayout onNavigateHome={handleNavigateHome}>
-      {view === 'landing' ? (
-        <LandingPage
-          onCreatePrank={handleCreatePrank}
-        />
-      ) : (
-        <PrankBuilder
-          initialConfig={activeConfig}
-          onNavigateHome={handleNavigateHome}
-          onLaunchPrank={handleLaunchPrank}
-        />
-      )}
+      <AnimatedPageTransition viewKey={view}>
+        {view === 'landing' ? (
+          <LandingPage
+            onCreatePrank={handleCreatePrank}
+            recentHistory={history.slice(0, 3)}
+          />
+        ) : (
+          <PrankBuilder
+            initialConfig={activeConfig}
+            preferDraft={preferDraft}
+            onNavigateHome={handleNavigateHome}
+            onLaunchPrank={handleLaunchPrank}
+          />
+        )}
+      </AnimatedPageTransition>
     </AppLayout>
   );
 }
