@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { PrankConfig, PrankType } from '../types/prank';
 import { ResponsivePreviewWrapper } from './builder/ResponsivePreviewWrapper';
-import { LocalHistoryPanel } from './builder/LocalHistoryPanel';
+import { SavedPranksPanel } from './history/SavedPranksPanel';
 import { ShareCard } from './builder/ShareCard';
 import { ThemePicker } from './builder/ThemePicker';
 import { AppThemePicker } from './builder/AppThemePicker';
@@ -42,10 +42,12 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
 }) => {
   const [config, setConfig] = useState<PrankConfig>(initialConfig);
   const [shareUrl, setShareUrl] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
   const {
     history,
     draft,
     saveToHistory,
+    updateHistoryItem,
     duplicateFromHistory,
     deleteFromHistory,
     clearHistory,
@@ -90,11 +92,26 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
   };
 
   const handleSaveToHistory = () => {
-    saveToHistory(config.title || 'Broma sin título', config);
+    if (editingId) {
+      updateHistoryItem(editingId, {
+        name: config.title || 'Broma sin título',
+        config,
+      });
+    } else {
+      const item = saveToHistory(config.title || 'Broma sin título', config);
+      if (item) setEditingId(item.id);
+    }
   };
 
   const handleLoadHistory = (item: HistoryItem) => {
     setConfig(item.config);
+    setEditingId(item.id);
+    setShareUrl('');
+  };
+
+  const handleEditHistory = (item: HistoryItem) => {
+    setConfig(item.config);
+    setEditingId(item.id);
     setShareUrl('');
   };
 
@@ -125,13 +142,18 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
 
       <div className="builder-grid">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <LocalHistoryPanel
+          <SavedPranksPanel
             items={history}
             onLoad={handleLoadHistory}
             onSave={handleSaveToHistory}
             onDuplicate={duplicateFromHistory}
-            onDelete={deleteFromHistory}
+            onDelete={(id) => {
+              deleteFromHistory(id);
+              if (editingId === id) setEditingId(null);
+            }}
             onClear={clearHistory}
+            editingId={editingId}
+            onEdit={handleEditHistory}
           />
 
           <motion.div

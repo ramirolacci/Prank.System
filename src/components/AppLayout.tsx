@@ -1,5 +1,7 @@
-import React from 'react';
-import { Terminal, Flame } from 'lucide-react';
+import React, { useState } from 'react';
+import { Terminal, Flame, Settings } from 'lucide-react';
+import { SettingsPanel } from './settings/SettingsPanel';
+import { SettingsUIProvider } from '../context/SettingsUIContext';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -7,7 +9,10 @@ interface AppLayoutProps {
 }
 
 export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }) => {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   return (
+    <SettingsUIProvider value={{ openSettings: () => setSettingsOpen(true) }}>
     <div
       style={{
         display: 'flex',
@@ -16,7 +21,6 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
         background: 'var(--bg-main)',
       }}
     >
-      {/* Header */}
       <header
         className="app-header"
         style={{
@@ -48,7 +52,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(139, 92, 246, 0.3)',
+              boxShadow: '0 0 15px var(--primary-glow)',
             }}
           >
             <Flame size={20} color="#fff" />
@@ -82,29 +86,37 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
           </div>
         </div>
 
-        <div className="app-header-badge"
-          style={{
-            alignItems: 'center',
-            gap: '0.4rem',
-            fontSize: '0.75rem',
-            color: 'var(--text-muted)',
-            background: 'rgba(255,255,255,0.02)',
-            padding: '0.4rem 0.8rem',
-            borderRadius: '8px',
-            border: '1px solid var(--border)',
-          }}
-        >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
+            type="button"
+            onClick={() => setSettingsOpen(true)}
+            className="icon-btn"
+            aria-label="Abrir ajustes"
+            title="Ajustes"
+          >
+            <Settings size={18} />
+          </button>
+          <div
+            className="app-header-badge"
+            style={{
+              alignItems: 'center',
+              gap: '0.4rem',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)',
+              background: 'rgba(255,255,255,0.02)',
+              padding: '0.4rem 0.8rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border)',
+            }}
+          >
             <Terminal size={14} style={{ color: 'var(--accent)' }} />
             <span>100% Inofensivo</span>
           </div>
+        </div>
       </header>
 
-      {/* Main content */}
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {children}
-      </main>
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>{children}</main>
 
-      {/* Footer */}
       <footer
         className="app-footer"
         style={{
@@ -125,7 +137,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
           }}
         >
           <p>
-            Desarrollado con 💜. <strong>PrankForge</strong> es un simulador visual temporal de código abierto.
+            Desarrollado con 💜. <strong>PrankForge</strong> es un simulador visual de código abierto.
           </p>
           <div
             style={{
@@ -134,14 +146,19 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
               marginTop: '0.25rem',
               fontSize: '0.72rem',
               color: 'var(--text-dark)',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
             }}
           >
-            <span>🔒 Sin Base de Datos</span>
-            <span>🍪 Sin cookies invasivas</span>
+            <span>🔒 Sin servidor</span>
+            <span>💾 Datos locales</span>
             <span>🎉 Confeti incluido</span>
           </div>
         </div>
       </footer>
+
+      <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
+    </SettingsUIProvider>
   );
 };

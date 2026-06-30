@@ -11,6 +11,11 @@ import { PrankConfig, PRANK_TYPE_LABELS } from '../../types/prank';
 import { CopyLinkButton } from '../shared/CopyLinkButton';
 import { getShortShareDisplay } from '../../utils/url';
 import { APP_THEMES } from '../../utils/themes';
+import {
+  exportShareCardAsImage,
+  getShareCardExportNode,
+  SHARE_CARD_EXPORT_ID,
+} from '../../utils/imageExport';
 
 interface ShareCardProps {
   config: PrankConfig;
@@ -34,11 +39,17 @@ export const ShareCard: React.FC<ShareCardProps> = ({
   );
 
   const handleDownloadImage = async () => {
-    // Architecture ready for html-to-image integration later
-    console.info('[ShareCard] Image export ready — integrate html-to-image when needed');
-    alert(
-      'La exportación de imagen estará disponible pronto. Por ahora podés copiar el link o compartir por WhatsApp.'
-    );
+    const node = getShareCardExportNode(cardRef.current?.parentElement ?? undefined);
+    if (!node) {
+      alert('Generá el link primero para ver la tarjeta compartible.');
+      return;
+    }
+    const dataUrl = await exportShareCardAsImage(node);
+    if (!dataUrl) {
+      alert(
+        'La exportación de imagen estará disponible pronto. Por ahora podés copiar el link o compartir por WhatsApp.'
+      );
+    }
   };
 
   if (!shareUrl) {
@@ -72,7 +83,7 @@ export const ShareCard: React.FC<ShareCardProps> = ({
       <div
         ref={cardRef}
         className={`share-card-preview app-theme-${config.appTheme}`}
-        data-export-target="share-card"
+        data-export-target={SHARE_CARD_EXPORT_ID}
         style={{ ['--accent-color' as string]: config.accentColor }}
       >
         <div className="share-card-badge">

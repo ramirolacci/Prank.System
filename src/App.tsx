@@ -5,14 +5,16 @@ import { PrankBuilder } from './components/PrankBuilder';
 import { PrankRuntime } from './components/PrankRuntime';
 import { AnimatedPageTransition } from './components/shared/AnimatedPageTransition';
 import { PrankConfig } from './types/prank';
-import { DEFAULT_CONFIG, decodeConfig } from './utils/url';
+import { DEFAULT_CONFIG, decodeConfig, normalizeConfig } from './utils/url';
 import { usePrankStorage } from './context/LocalStorageContext';
+import { useTheme } from './context/ThemeProvider';
 
 export default function App() {
   const [view, setView] = useState<'landing' | 'builder' | 'runtime'>('landing');
   const [activeConfig, setActiveConfig] = useState<PrankConfig>(DEFAULT_CONFIG);
   const [preferDraft, setPreferDraft] = useState(false);
-  const { history } = usePrankStorage();
+  const { history, lastPrank } = usePrankStorage();
+  const { settings } = useTheme();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -26,12 +28,24 @@ export default function App() {
     }
   }, []);
 
+  const configWithGlobalTheme = (base?: Partial<PrankConfig>): PrankConfig =>
+    normalizeConfig({
+      ...DEFAULT_CONFIG,
+      appTheme: settings.appTheme,
+      accentColor: settings.accentColor,
+      ...base,
+    });
+
   const handleCreatePrank = (initialConfig?: PrankConfig) => {
     if (initialConfig) {
       setActiveConfig(initialConfig);
       setPreferDraft(false);
     } else {
-      setActiveConfig(DEFAULT_CONFIG);
+      setActiveConfig(
+        lastPrank
+          ? { ...lastPrank, appTheme: settings.appTheme, accentColor: settings.accentColor }
+          : configWithGlobalTheme()
+      );
       setPreferDraft(true);
     }
     setView('builder');
@@ -50,22 +64,14 @@ export default function App() {
   };
 
   if (view === 'runtime') {
-    return (
-      <PrankRuntime
-        config={activeConfig}
-        onExit={handleNavigateHome}
-      />
-    );
+    return <PrankRuntime config={activeConfig} onExit={handleNavigateHome} />;
   }
 
   return (
     <AppLayout onNavigateHome={handleNavigateHome}>
       <AnimatedPageTransition viewKey={view}>
         {view === 'landing' ? (
-          <LandingPage
-            onCreatePrank={handleCreatePrank}
-            recentHistory={history.slice(0, 3)}
-          />
+          <LandingPage onCreatePrank={handleCreatePrank} history={history} />
         ) : (
           <PrankBuilder
             initialConfig={activeConfig}

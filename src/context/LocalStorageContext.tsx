@@ -7,7 +7,13 @@ export type { HistoryItem };
 interface LocalStorageContextValue {
   history: HistoryItem[];
   draft: PrankConfig | null;
+  lastPrank: PrankConfig | null;
+  hydrated: boolean;
   saveToHistory: (customName: string, config: PrankConfig) => HistoryItem | null;
+  updateHistoryItem: (
+    id: string,
+    updates: { name?: string; config?: PrankConfig }
+  ) => HistoryItem | null;
   duplicateFromHistory: (id: string) => HistoryItem | null;
   deleteFromHistory: (id: string) => void;
   clearHistory: () => void;
