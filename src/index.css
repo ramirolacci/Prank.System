@@ -1,0 +1,276 @@
+:root {
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* Color Palette - Creator Studio (Dark Neon Theme) */
+  --bg-main: #0a0b10;
+  --bg-sidebar: #0f111a;
+  --bg-card: rgba(20, 22, 36, 0.6);
+  --bg-glass: rgba(10, 11, 16, 0.5);
+  
+  --primary: #8b5cf6;       /* Violet */
+  --primary-hover: #7c3aed;
+  --primary-glow: rgba(139, 92, 246, 0.35);
+  
+  --accent: #06b6d4;        /* Neon Cyan */
+  --accent-glow: rgba(6, 182, 212, 0.3);
+  
+  --accent-pink: #ec4899;   /* Neon Pink */
+  
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --text-dark: #4b5563;
+  
+  --border: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(139, 92, 246, 0.4);
+  
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Glassmorphism utility card */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 15px 0 var(--primary-glow);
+}
+
+/* Neon utilities */
+.text-glow {
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+}
+
+.bg-glow-purple {
+  box-shadow: 0 0 25px var(--primary-glow);
+}
+
+/* CRT Screen Effect */
+.crt-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.15;
+}
+
+/* Scanlines moving animation */
+.scanline {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
+  );
+  background-size: 100% 4px;
+  position: absolute;
+  z-index: 99;
+  pointer-events: none;
+}
+
+/* Glitch animation text */
+.glitch-text {
+  position: relative;
+  animation: glitch-skew 1s infinite linear alternate-reverse;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff00c1;
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -2px 0 #00fff9, 0 2px #00fff9;
+  clip: rect(85px, 450px, 140px, 0);
+  animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(31px, 9999px, 94px, 0); }
+  10% { clip: rect(112px, 9999px, 76px, 0); }
+  20% { clip: rect(85px, 9999px, 5px, 0); }
+  30% { clip: rect(27px, 9999px, 115px, 0); }
+  40% { clip: rect(73px, 9999px, 29px, 0); }
+  50% { clip: rect(118px, 9999px, 142px, 0); }
+  60% { clip: rect(9px, 9999px, 53px, 0); }
+  70% { clip: rect(58px, 9999px, 122px, 0); }
+  80% { clip: rect(104px, 9999px, 15px, 0); }
+  90% { clip: rect(42px, 9999px, 88px, 0); }
+  100% { clip: rect(135px, 9999px, 61px, 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip: rect(76px, 9999px, 116px, 0); }
+  11% { clip: rect(25px, 9999px, 83px, 0); }
+  22% { clip: rect(138px, 9999px, 5px, 0); }
+  33% { clip: rect(10px, 9999px, 60px, 0); }
+  44% { clip: rect(95px, 9999px, 130px, 0); }
+  55% { clip: rect(41px, 9999px, 12px, 0); }
+  66% { clip: rect(122px, 9999px, 149px, 0); }
+  77% { clip: rect(17px, 9999px, 92px, 0); }
+  88% { clip: rect(63px, 9999px, 110px, 0); }
+  99% { clip: rect(102px, 9999px, 35px, 0); }
+  100% { clip: rect(12px, 9999px, 140px, 0); }
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(3deg); }
+  10% { transform: skew(-1deg); }
+  20% { transform: skew(1deg); }
+  30% { transform: skew(-2deg); }
+  40% { transform: skew(0deg); }
+  50% { transform: skew(2deg); }
+  60% { transform: skew(-3deg); }
+  70% { transform: skew(1deg); }
+  80% { transform: skew(-1deg); }
+  90% { transform: skew(2deg); }
+  100% { transform: skew(0deg); }
+}
+
+/* Jitter shake animation for glitch intensity */
+@keyframes jitter {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(2px, -2px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(1px, -1px); }
+  50% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  70% { transform: translate(-1px, -1px); }
+  80% { transform: translate(2px, -2px); }
+  90% { transform: translate(-2px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.jitter-effect {
+  animation: jitter 0.15s infinite;
+}
+
+/* Cursor trails container */
+.cursor-trail-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.trail-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: fade-out 0.4s forwards linear;
+}
+
+@keyframes fade-out {
+  0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+}
+
+/* Loading animations */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* MacOS progress loading spinner style */
+.mac-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #555;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1.2s infinite linear;
+}
+
+/* Terminal blink cursor */
+.terminal-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 18px;
+  background: currentColor;
+  margin-left: 4px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to { background-color: transparent }
+  50% { background-color: currentColor }
+}
