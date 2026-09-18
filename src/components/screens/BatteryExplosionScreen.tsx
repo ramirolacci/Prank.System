@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PrankConfig } from '../../types/prank';
-import { BatteryCharging, Zap, AlertOctagon, Flame } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import { playAlarmSiren, playPulseBuzzer } from '../../utils/audio';
 import { vibrateAlarmPattern } from '../../utils/haptics';
 

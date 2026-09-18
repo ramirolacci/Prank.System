@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PrankConfig } from '../../types/prank';
-import { AlertTriangle, ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 import { playBsodBeep, playRetroErrorDing } from '../../utils/audio';
 import { vibrateErrorPulse } from '../../utils/haptics';
 

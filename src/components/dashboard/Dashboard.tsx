@@ -3,15 +3,11 @@ import { motion } from 'framer-motion';
 import {
   Plus,
   Shuffle,
-  Palette,
   Sparkles,
   BookOpen,
 } from 'lucide-react';
 import { PrankConfig } from '../../types/prank';
 import { HistoryItem } from '../../hooks/useLocalStorage';
-import { useTheme } from '../../context/ThemeProvider';
-import { useSettingsUI } from '../../context/SettingsUIContext';
-import { THEME_LABELS } from '../../theme/themeConfig';
 import { RecentPranksList } from '../history/RecentPranksList';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { getCardVariants } from '../shared/motionPresets';
@@ -31,10 +27,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   onShowGuide,
   showGuide = false,
 }) => {
-  const { theme } = useTheme();
-  const { openSettings } = useSettingsUI();
   const reducedMotion = useReducedMotion();
-  const themeMeta = THEME_LABELS[theme];
   const cardMotion = getCardVariants(reducedMotion);
 
   return (
@@ -52,10 +45,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
               ? `${history.length} broma${history.length !== 1 ? 's' : ''} guardada${history.length !== 1 ? 's' : ''} en este dispositivo`
               : 'Empezá creando tu primera broma visual'}
           </p>
-        </div>
-        <div className="dashboard-theme-badge" onClick={openSettings} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && openSettings()}>
-          <Palette size={14} />
-          <span>Tema: {themeMeta.label}</span>
         </div>
       </div>
 

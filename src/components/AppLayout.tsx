@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Terminal, Flame, Settings } from 'lucide-react';
+import { Terminal, Flame } from 'lucide-react';
 import { SettingsPanel } from './settings/SettingsPanel';
 import { SettingsUIProvider } from '../context/SettingsUIContext';
 import { PwaInstallBanner } from './pwa/PwaInstallBanner';
@@ -86,15 +86,6 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {!isStandalone && <PwaInstallButton compact />}
-          <button
-            type="button"
-            onClick={() => setSettingsOpen(true)}
-            className="icon-btn"
-            aria-label="Abrir ajustes"
-            title="Ajustes"
-          >
-            <Settings size={18} />
-          </button>
           <div
             className="app-header-badge"
             style={{

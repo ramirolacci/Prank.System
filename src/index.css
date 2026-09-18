@@ -3,27 +3,27 @@
   line-height: 1.5;
   font-weight: 400;
 
-  /* Color Palette - Creator Studio (Dark Neon Theme) */
-  --bg-main: #0a0b10;
-  --bg-sidebar: #0f111a;
-  --bg-card: rgba(20, 22, 36, 0.6);
-  --bg-glass: rgba(10, 11, 16, 0.5);
+  /* Color Palette - Antigravity IDE Default Theme */
+  --bg-main: #0b0c14;
+  --bg-sidebar: #0f111d;
+  --bg-card: rgba(18, 20, 32, 0.75);
+  --bg-glass: rgba(11, 12, 20, 0.65);
   
-  --primary: #8b5cf6;       /* Violet */
-  --primary-hover: #7c3aed;
-  --primary-glow: rgba(139, 92, 246, 0.35);
+  --primary: #6366f1;       /* Antigravity Indigo */
+  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.35);
   
-  --accent: #06b6d4;        /* Neon Cyan */
-  --accent-glow: rgba(6, 182, 212, 0.3);
+  --accent: #38bdf8;        /* Antigravity Electric Cyan */
+  --accent-glow: rgba(56, 189, 248, 0.3);
   
-  --accent-pink: #ec4899;   /* Neon Pink */
+  --accent-pink: #f43f5e;   /* Antigravity Rose Pink */
   
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-dark: #4b5563;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dark: #475569;
   
-  --border: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(139, 92, 246, 0.4);
+  --border: rgba(148, 163, 184, 0.1);
+  --border-active: rgba(99, 102, 241, 0.45);
   
   --success: #10b981;
   --danger: #ef4444;

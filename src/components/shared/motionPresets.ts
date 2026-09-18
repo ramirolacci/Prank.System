@@ -1,4 +1,4 @@
-import { Transition, Variants } from 'framer-motion';
+import { Transition, TargetAndTransition, Variants } from 'framer-motion';
 
 const REDUCED_DURATION = 0.12;
 
@@ -27,8 +27,8 @@ export function getCardVariants(
   reducedMotion: boolean,
   index = 0
 ): {
-  initial: object;
-  animate: object;
+  initial: TargetAndTransition;
+  animate: TargetAndTransition;
   transition: Transition;
 } {
   if (reducedMotion) {
