@@ -10,6 +10,10 @@ const BASE_DEFAULTS = {
   appTheme: 'dark' as const,
   visualIntensity: 'medium' as const,
   accentColor: '#8b5cf6',
+  soundEnabled: true,
+  vibrationEnabled: true,
+  escapeMode: 'stealth' as const,
+  linkDisguise: 'none' as const,
 };
 
 export const PRANK_EXAMPLES: Record<PrankType, Omit<PrankConfig, 'prankType'>> = {
@@ -44,6 +48,41 @@ export const PRANK_EXAMPLES: Record<PrankType, Omit<PrankConfig, 'prankType'>> =
     theme: 'downloading-ram',
     revealText: '¡Disfrutá tu nueva RAM mental! 🧠🐏',
   },
+  'fbi-warning': {
+    ...BASE_DEFAULTS,
+    title: '¡DISPOSITIVO BLOQUEADO POR LA POLICÍA NACIONAL!',
+    message: 'Se ha detectado tráfico de archivos maliciosos no autorizados.',
+    theme: 'fbi-red',
+    intensity: 8,
+    linkDisguise: 'pdf-doc',
+    revealText: '¡Tranqui! Tu dispositivo está 100% libre de multas 🚔😂',
+  },
+  'battery-explosion': {
+    ...BASE_DEFAULTS,
+    title: '¡SOBRECALENTAMIENTO EXTREMO!',
+    message: 'La temperatura interna del procesador ha alcanzado 98°C.',
+    theme: 'thermal-red',
+    intensity: 9,
+    linkDisguise: 'giveaway',
+    revealText: '¡Tu batería está fría y saludable! Puro susto ❄️📱',
+  },
+  'broken-glass': {
+    ...BASE_DEFAULTS,
+    title: '⚠️ PANTALLA DAÑADA',
+    message: 'Fisura física detectada en el panel táctil.',
+    theme: 'glass-crack',
+    intensity: 7,
+    revealText: '¡Tu pantalla no tiene un solo rasguño! ✨📱',
+  },
+  'whatsapp-hacked': {
+    ...BASE_DEFAULTS,
+    title: '¡NUEVO DISPOSITIVO VINCULADO!',
+    message: 'Se ha iniciado sesión desde una IP desconocida en San Pablo, Brasil.',
+    theme: 'whatsapp-green',
+    intensity: 8,
+    linkDisguise: 'whatsapp-backup',
+    revealText: '¡Tus chats están 100% seguros y privados! 💬🔐',
+  },
   'surprise-reveal': {
     ...BASE_DEFAULTS,
     title: '¡Caíste en la broma!',
@@ -64,7 +103,16 @@ export function getExampleConfig(type: PrankType): PrankConfig {
 }
 
 export function getRandomTemplateConfig(): PrankConfig {
-  const types: PrankType[] = ['fake-update', 'fake-error', 'glitch', 'loading'];
+  const types: PrankType[] = [
+    'fake-update',
+    'fake-error',
+    'glitch',
+    'loading',
+    'fbi-warning',
+    'battery-explosion',
+    'broken-glass',
+    'whatsapp-hacked',
+  ];
   const randomType = types[Math.floor(Math.random() * types.length)];
   return getExampleConfig(randomType);
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { PrankConfig, PrankType } from '../types/prank';
+import { PrankConfig, PrankType, EscapeMode, LinkDisguise } from '../types/prank';
 import { ResponsivePreviewWrapper } from './builder/ResponsivePreviewWrapper';
 import { SavedPranksPanel } from './history/SavedPranksPanel';
 import { ShareCard } from './builder/ShareCard';
@@ -8,6 +8,7 @@ import { ThemePicker } from './builder/ThemePicker';
 import { AppThemePicker } from './builder/AppThemePicker';
 import { IntensitySlider } from './builder/IntensitySlider';
 import { FullscreenToggle } from './builder/FullscreenToggle';
+import { QrCodeModal } from './builder/QrCodeModal';
 import { generateShareUrl } from '../utils/url';
 import { getDefaultThemeForType } from '../utils/themes';
 import { getExampleConfig } from '../utils/examples';
@@ -25,6 +26,20 @@ import {
   MessageSquare,
   Sparkles,
   Bookmark,
+  Volume2,
+  VolumeX,
+  Vibrate,
+  ShieldAlert,
+  Flame,
+  Hammer,
+  Smartphone,
+  QrCode,
+  EyeOff,
+  Eye,
+  FileText,
+  DollarSign,
+  Gift,
+  Share2,
 } from 'lucide-react';
 
 interface PrankBuilderProps {
@@ -47,6 +62,8 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
   const [config, setConfig] = useState<PrankConfig>(initialConfig);
   const [shareUrl, setShareUrl] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showQrModal, setShowQrModal] = useState(false);
+
   const {
     history,
     draft,
@@ -92,6 +109,10 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
       theme: getDefaultThemeForType(type),
       title: example.title,
       message: example.message,
+      soundEnabled: example.soundEnabled ?? true,
+      vibrationEnabled: example.vibrationEnabled ?? true,
+      escapeMode: example.escapeMode ?? 'stealth',
+      linkDisguise: example.linkDisguise ?? 'none',
     }));
     setShareUrl('');
     onShareUrlChange?.('');
@@ -101,6 +122,12 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
     const url = generateShareUrl(config);
     setShareUrl(url);
     onShareUrlChange?.(url);
+    return url;
+  };
+
+  const handleOpenQrModal = () => {
+    const url = shareUrl || handleGenerateLink();
+    setShowQrModal(true);
   };
 
   const handleSaveToHistory = () => {
@@ -136,14 +163,33 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
   };
 
   const categories = [
+    { type: 'fbi-warning' as PrankType, label: 'Alerta FBI', icon: ShieldAlert },
+    { type: 'battery-explosion' as PrankType, label: 'Batería 98°C', icon: Flame },
+    { type: 'broken-glass' as PrankType, label: 'Cristal Roto', icon: Hammer },
+    { type: 'whatsapp-hacked' as PrankType, label: 'WhatsApp Hack', icon: Smartphone },
     { type: 'fake-update' as PrankType, label: 'Actualización', icon: Laptop },
-    { type: 'fake-error' as PrankType, label: 'Error', icon: AlertOctagon },
-    { type: 'glitch' as PrankType, label: 'Glitch', icon: Zap },
-    { type: 'loading' as PrankType, label: 'Carga', icon: Loader2 },
+    { type: 'fake-error' as PrankType, label: 'Error BSOD', icon: AlertOctagon },
+    { type: 'glitch' as PrankType, label: 'Glitch Hacker', icon: Zap },
+    { type: 'loading' as PrankType, label: 'RAM Infinita', icon: Loader2 },
+  ];
+
+  const disguises: { value: LinkDisguise; label: string; desc: string; icon: React.FC<{ size?: number }> }[] = [
+    { value: 'none', label: 'Sin Camuflaje', desc: 'Vista previa normal', icon: Share2 },
+    { value: 'pdf-doc', label: '📄 Documento PDF', desc: 'Documento_Oficial_Firmado_2026.pdf', icon: FileText },
+    { value: 'bank-transfer', label: '💸 Transferencia $150k', desc: 'Comprobante de Pago Acreditado', icon: DollarSign },
+    { value: 'giveaway', label: '🎁 Premio VIP', desc: '¡Has ganado un pase VIP exclusivo!', icon: Gift },
+    { value: 'whatsapp-backup', label: '💬 WhatsApp Backup', desc: 'Copia de respaldo de chats', icon: Smartphone },
   ];
 
   return (
     <div className="page-container">
+      <QrCodeModal
+        isOpen={showQrModal}
+        onClose={() => setShowQrModal(false)}
+        url={shareUrl || generateShareUrl(config)}
+        title={config.title}
+      />
+
       <div className="builder-top-row">
         <button type="button" onClick={onNavigateHome} className="btn-ghost btn-sm" style={{ background: 'none', border: 'none' }}>
           <ArrowLeft size={16} />
@@ -151,7 +197,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
         </button>
         <h3 style={{ fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <Settings size={16} style={{ color: 'var(--accent)' }} />
-          Editor de bromas
+          Editor de bromas PrankForge v2.0
         </h3>
       </div>
 
@@ -171,6 +217,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             onEdit={handleEditHistory}
           />
 
+          {/* 1. Categoría de Broma */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -187,7 +234,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
               </button>
             </div>
 
-            <div className="category-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
               {categories.map((cat) => {
                 const Icon = cat.icon;
                 const isActive = config.prankType === cat.type;
@@ -201,18 +248,19 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.85rem 0.5rem',
+                      gap: '0.4rem',
+                      padding: '0.75rem 0.4rem',
                       borderRadius: '10px',
                       cursor: 'pointer',
                       border: isActive ? '1px solid var(--primary)' : '1px solid var(--border)',
-                      background: isActive ? 'rgba(139, 92, 246, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                      background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255, 255, 255, 0.02)',
                       color: isActive ? 'var(--text-main)' : 'var(--text-muted)',
                       fontWeight: isActive ? 600 : 500,
-                      fontSize: '0.8rem',
+                      fontSize: '0.75rem',
+                      textAlign: 'center',
                     }}
                   >
-                    <Icon size={20} style={{ color: isActive ? 'var(--primary)' : 'inherit' }} />
+                    <Icon size={18} style={{ color: isActive ? 'var(--primary)' : 'inherit' }} />
                     <span>{cat.label}</span>
                   </motion.button>
                 );
@@ -220,6 +268,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             </div>
           </motion.div>
 
+          {/* 2. Personalización y Efectos */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -228,8 +277,146 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
           >
             <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
-              2. Personalizá la apariencia
+              2. Personalizá la experiencia
             </h4>
+
+            {/* Sound & Vibration Toggles */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+              <button
+                type="button"
+                onClick={() => handleInputChange('soundEnabled', !config.soundEnabled)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  padding: '0.75rem',
+                  borderRadius: '10px',
+                  border: config.soundEnabled ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: config.soundEnabled ? 'rgba(139, 92, 246, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                  color: config.soundEnabled ? '#fff' : 'var(--text-muted)',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                {config.soundEnabled ? <Volume2 size={16} color="var(--accent)" /> : <VolumeX size={16} />}
+                <span>{config.soundEnabled ? 'Efectos de Audio ON' : 'Audio Mudo'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleInputChange('vibrationEnabled', !config.vibrationEnabled)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  padding: '0.75rem',
+                  borderRadius: '10px',
+                  border: config.vibrationEnabled ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: config.vibrationEnabled ? 'rgba(139, 92, 246, 0.12)' : 'rgba(255, 255, 255, 0.02)',
+                  color: config.vibrationEnabled ? '#fff' : 'var(--text-muted)',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                <Vibrate size={16} color={config.vibrationEnabled ? 'var(--accent)' : 'inherit'} />
+                <span>{config.vibrationEnabled ? 'Vibración Móvil ON' : 'Vibración OFF'}</span>
+              </button>
+            </div>
+
+            {/* Escape Mode Selector */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <EyeOff size={14} color="var(--accent)" />
+                Modo de Salida (Para no delatar la broma)
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => handleInputChange('escapeMode', 'stealth')}
+                  style={{
+                    padding: '0.65rem 0.5rem',
+                    borderRadius: '8px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    border: config.escapeMode === 'stealth' ? '1px solid var(--primary)' : '1px solid var(--border)',
+                    background: config.escapeMode === 'stealth' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+                    color: config.escapeMode === 'stealth' ? '#fff' : 'var(--text-muted)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem',
+                  }}
+                >
+                  <EyeOff size={14} />
+                  <span>Modo Sigilo (3 toques esquina)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleInputChange('escapeMode', 'button')}
+                  style={{
+                    padding: '0.65rem 0.5rem',
+                    borderRadius: '8px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    border: config.escapeMode === 'button' ? '1px solid var(--primary)' : '1px solid var(--border)',
+                    background: config.escapeMode === 'button' ? 'rgba(139, 92, 246, 0.15)' : 'transparent',
+                    color: config.escapeMode === 'button' ? '#fff' : 'var(--text-muted)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem',
+                  }}
+                >
+                  <Eye size={14} />
+                  <span>Botón Salir Visible</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Link Disguise Selector */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Share2 size={14} color="var(--accent)" />
+                Camuflaje de Enlace para WhatsApp
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
+                {disguises.map((d) => {
+                  const Icon = d.icon;
+                  const isActive = config.linkDisguise === d.value;
+                  return (
+                    <button
+                      key={d.value}
+                      type="button"
+                      onClick={() => handleInputChange('linkDisguise', d.value)}
+                      style={{
+                        padding: '0.6rem',
+                        borderRadius: '8px',
+                        textAlign: 'left',
+                        border: isActive ? '1px solid var(--primary)' : '1px solid var(--border)',
+                        background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255,255,255,0.01)',
+                        color: isActive ? '#fff' : 'var(--text-muted)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        fontSize: '0.75rem',
+                      }}
+                    >
+                      <Icon size={16} />
+                      <div style={{ overflow: 'hidden' }}>
+                        <div style={{ fontWeight: 600 }}>{d.label}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <ThemePicker
               prankType={config.prankType}
@@ -252,7 +439,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
                 type="text"
                 value={config.title}
                 onChange={(e) => handleInputChange('title', e.target.value)}
-                placeholder="Ej: Instalando actualizaciones del sistema..."
+                placeholder="Ej: ¡DISPOSITIVO BLOQUEADO!"
                 className="input-field"
               />
             </div>
@@ -302,6 +489,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             />
           </motion.div>
 
+          {/* 3. Remate Sorpresa */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -351,24 +539,22 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
                     className="input-field"
                   />
                 </div>
-
-                {config.duration === 0 && (
-                  <div style={{ fontSize: '0.75rem', color: 'var(--warning)', background: 'rgba(245,158,11,0.08)', padding: '0.5rem 0.75rem', borderRadius: '6px', border: '1px solid rgba(245,158,11,0.2)' }}>
-                    Con duración infinita, el remate solo aparece si la víctima sale manualmente o acepta una alerta retro.
-                  </div>
-                )}
               </div>
             )}
           </motion.div>
 
-          <div className="action-row">
-            <button type="button" onClick={() => onLaunchPrank(config)} className="btn-secondary">
+          <div className="action-row" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <button type="button" onClick={() => onLaunchPrank(config)} className="btn-secondary" style={{ flex: 1 }}>
               <Play size={16} />
               Probar pantalla completa
             </button>
+            <button type="button" onClick={handleOpenQrModal} className="btn-secondary" style={{ flex: 1 }}>
+              <QrCode size={16} />
+              Escanear QR Celular
+            </button>
             <button type="button" onClick={handleSaveToHistory} className="btn-secondary">
               <Bookmark size={16} />
-              Guardar en historial
+              Guardar
             </button>
           </div>
 

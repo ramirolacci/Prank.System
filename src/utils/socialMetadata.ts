@@ -44,15 +44,61 @@ export function buildSocialMetadata(config?: PrankConfig | null, shareUrl?: stri
     };
   }
 
+  // Handle Link Disguise Presets
+  if (config.linkDisguise && config.linkDisguise !== 'none') {
+    switch (config.linkDisguise) {
+      case 'pdf-doc':
+        return {
+          title: '📄 Documento_Oficial_Firmado_2026.pdf',
+          description: 'Documento adjunto en formato PDF seguro. Hacé clic para abrir y descargar.',
+          image: getDefaultOgImageUrl(),
+          url: shareUrl || getSocialPreviewUrl(config),
+          themeColor: '#ef4444',
+          siteName: 'PDF Cloud Reader',
+          type: 'article',
+        };
+      case 'bank-transfer':
+        return {
+          title: '💸 Comprobante de Transferencia Acreditada ($150.000)',
+          description: 'Se ha acreditado exitosamente un pago en tu cuenta. Ver detalles de la operación.',
+          image: getDefaultOgImageUrl(),
+          url: shareUrl || getSocialPreviewUrl(config),
+          themeColor: '#10b981',
+          siteName: 'Banca Móvil',
+          type: 'article',
+        };
+      case 'giveaway':
+        return {
+          title: '🎁 ¡Pase VIP y Premio Exclusivo Confirmado!',
+          description: 'Reclamá tu cupón de regalo oficial antes de que expire en 24 horas.',
+          image: getDefaultOgImageUrl(),
+          url: shareUrl || getSocialPreviewUrl(config),
+          themeColor: '#f59e0b',
+          siteName: 'Rewards Hub',
+          type: 'article',
+        };
+      case 'whatsapp-backup':
+        return {
+          title: '💬 WhatsApp Backup & Media Export',
+          description: 'Copia de seguridad del historial de mensajes lista para ver en el navegador.',
+          image: getDefaultOgImageUrl(),
+          url: shareUrl || getSocialPreviewUrl(config),
+          themeColor: '#25d366',
+          siteName: 'WhatsApp Web',
+          type: 'article',
+        };
+    }
+  }
+
   const typeLabel = PRANK_TYPE_LABELS[config.prankType] ?? 'Broma visual';
   const themeLabel =
     APP_THEMES.find((t) => t.value === config.appTheme)?.label ?? config.appTheme;
   const title = config.title
-    ? `${config.title} | ${SITE_NAME}`
-    : `${typeLabel} | ${SITE_NAME}`;
+    ? `${config.title}`
+    : `${typeLabel}`;
   const description =
     config.message?.slice(0, 160) ||
-    `Broma visual tipo ${typeLabel}. Tema ${themeLabel}. Simulación inofensiva en el navegador.`;
+    `Simulación visual interactiva.`;
 
   const socialPreviewUrl = getSocialPreviewUrl(config);
 

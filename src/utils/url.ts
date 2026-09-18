@@ -14,6 +14,10 @@ export const DEFAULT_CONFIG: PrankConfig = {
   appTheme: 'dark',
   visualIntensity: 'medium',
   accentColor: '#8b5cf6',
+  soundEnabled: true,
+  vibrationEnabled: true,
+  escapeMode: 'stealth',
+  linkDisguise: 'none',
 };
 
 function stripDefaults(config: PrankConfig): Partial<PrankConfig> {

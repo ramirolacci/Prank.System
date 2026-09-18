@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PrankConfig } from '../../types/prank';
 import { ShieldAlert } from 'lucide-react';
+import { playHackerTyping } from '../../utils/audio';
+import { vibrateImpactGlitch } from '../../utils/haptics';
 
 interface ScreenProps {
   config: PrankConfig;
@@ -15,7 +17,7 @@ interface TrailDot {
 }
 
 export const GlitchScreen: React.FC<ScreenProps> = ({ config, onComplete, isPreview = false }) => {
-  const { title, message, intensity, duration, theme, showReveal } = config;
+  const { title, message, intensity, duration, theme, showReveal, soundEnabled, vibrationEnabled } = config;
   const [trails, setTrails] = useState<TrailDot[]>([]);
   const [glitchMessage, setGlitchMessage] = useState('');
   const [hackLines, setHackLines] = useState<string[]>([]);
@@ -35,6 +37,10 @@ export const GlitchScreen: React.FC<ScreenProps> = ({ config, onComplete, isPrev
 
     let lineIndex = 0;
     const interval = setInterval(() => {
+      if (!isPreview) {
+        if (soundEnabled) playHackerTyping();
+        if (vibrationEnabled && lineIndex % 2 === 0) vibrateImpactGlitch();
+      }
       setHackLines((prev) => {
         const next = [...prev, defaultLines[lineIndex % defaultLines.length]];
         if (next.length > 8) next.shift(); // Keep only last 8 lines
@@ -44,7 +50,7 @@ export const GlitchScreen: React.FC<ScreenProps> = ({ config, onComplete, isPrev
     }, 1200 / (intensity / 4 + 0.5));
 
     return () => clearInterval(interval);
-  }, [intensity]);
+  }, [intensity, isPreview, soundEnabled, vibrationEnabled]);
 
   // Duration reveal timer
   useEffect(() => {

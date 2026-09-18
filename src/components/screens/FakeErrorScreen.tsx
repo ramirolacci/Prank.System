@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PrankConfig } from '../../types/prank';
 import { AlertTriangle, ShieldAlert } from 'lucide-react';
+import { playBsodBeep, playRetroErrorDing } from '../../utils/audio';
+import { vibrateErrorPulse } from '../../utils/haptics';
 
 interface ScreenProps {
   config: PrankConfig;
@@ -15,9 +17,20 @@ interface WindowPosition {
 }
 
 export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isPreview = false }) => {
-  const { theme, title, message, intensity, duration, showReveal } = config;
+  const { theme, title, message, intensity, duration, showReveal, soundEnabled, vibrationEnabled } = config;
   const [progress, setProgress] = useState(0);
   const [popups, setPopups] = useState<WindowPosition[]>([]);
+
+  // Sound and vibration on mount
+  useEffect(() => {
+    if (isPreview) return;
+    if (soundEnabled && theme === 'bsod') {
+      playBsodBeep();
+    }
+    if (vibrationEnabled) {
+      vibrateErrorPulse();
+    }
+  }, [isPreview, soundEnabled, vibrationEnabled, theme]);
 
   // Duration handler
   useEffect(() => {
@@ -58,6 +71,9 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
   // Handler for retro alert "Aceptar" or close click
   const handleRetroClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!isPreview && soundEnabled) {
+      playRetroErrorDing();
+    }
     if (popups.length > 25) {
       // If too many popups, auto-complete to reveal surprise
       if (showReveal) onComplete();
@@ -140,7 +156,7 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
               {message || 'Hold down the Power button for several seconds or press the Restart button.'}
             </p>
             
-            <div style={{ borderTop: '1px solid #333', paddingStep: '1rem', marginTop: '1.5rem', fontSize: '0.72rem', color: '#888', lineHeight: 1.5 }}>
+            <div style={{ borderTop: '1px solid #333', paddingTop: '1rem', marginTop: '1.5rem', fontSize: '0.72rem', color: '#888', lineHeight: 1.5 }}>
               <p>Veuillez redémarrer votre ordinateur. Maintenez le bouton de démarrage enfoncé.</p>
               <p style={{ marginTop: '0.5rem' }}>Bitte starten Sie den Computer neu. Halten Sie den Ein-/Ausschalter gedrückt.</p>
             </div>

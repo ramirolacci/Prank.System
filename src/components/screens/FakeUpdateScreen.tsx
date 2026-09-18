@@ -12,7 +12,7 @@ export const FakeUpdateScreen: React.FC<ScreenProps> = ({ config, onComplete, is
   const { theme, title, message, intensity, duration, showReveal } = config;
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     
     if (duration > 0) {
       // Calculate progress increment to reach 100% exactly at duration

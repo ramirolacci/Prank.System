@@ -6,7 +6,12 @@ import { FakeErrorScreen } from './screens/FakeErrorScreen';
 import { GlitchScreen } from './screens/GlitchScreen';
 import { LoadingScreen } from './screens/LoadingScreen';
 import { SurpriseRevealScreen } from './screens/SurpriseRevealScreen';
+import { FbiWarningScreen } from './screens/FbiWarningScreen';
+import { BatteryExplosionScreen } from './screens/BatteryExplosionScreen';
+import { BrokenGlassScreen } from './screens/BrokenGlassScreen';
+import { WhatsAppHackedScreen } from './screens/WhatsAppHackedScreen';
 import { getAppThemeClass } from '../utils/themes';
+import { initAudio } from '../utils/audio';
 
 interface PrankRuntimeProps {
   config: PrankConfig;
@@ -62,6 +67,9 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
   }, [isPreview, config.fullscreen]);
 
   const handleScreenClick = () => {
+    if (config.soundEnabled) {
+      initAudio();
+    }
     requestFullscreen();
   };
 
@@ -112,6 +120,14 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
         return <GlitchScreen {...props} />;
       case 'loading':
         return <LoadingScreen {...props} />;
+      case 'fbi-warning':
+        return <FbiWarningScreen {...props} />;
+      case 'battery-explosion':
+        return <BatteryExplosionScreen {...props} />;
+      case 'broken-glass':
+        return <BrokenGlassScreen {...props} />;
+      case 'whatsapp-hacked':
+        return <WhatsAppHackedScreen {...props} />;
       case 'surprise-reveal':
         return <SurpriseRevealScreen config={config} onExit={handleExit} />;
       default:
@@ -125,6 +141,7 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
     <div
       ref={containerRef}
       onClick={handleScreenClick}
+      onTouchStart={handleScreenClick}
       className={themeClass}
       style={{
         position: isPreview ? 'absolute' : 'fixed',
@@ -137,13 +154,15 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        touchAction: 'none',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
         ['--accent-color' as string]: config.accentColor,
       }}
     >
       {!isPreview && fullscreenBlocked && config.fullscreen && (
         <div className="fullscreen-banner">
-          Tu navegador no permite pantalla completa automática. La broma sigue funcionando — usá el
-          botón de salir cuando quieras.
+          Tu navegador no permite pantalla completa automática. La broma sigue funcionando.
         </div>
       )}
 
@@ -151,7 +170,9 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
         <div className="fullscreen-hint">Tocá la pantalla para expandir (opcional)</div>
       )}
 
-      {!isRevealed && !isPreview && <ExitButton onExit={handleExit} />}
+      {!isRevealed && !isPreview && (
+        <ExitButton onExit={handleExit} escapeMode={config.escapeMode ?? 'stealth'} />
+      )}
 
       {renderActiveScreen()}
     </div>
