@@ -40,6 +40,7 @@ import {
   DollarSign,
   Gift,
   Share2,
+  LucideIcon,
 } from 'lucide-react';
 
 interface PrankBuilderProps {
@@ -173,7 +174,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
     { type: 'loading' as PrankType, label: 'RAM Infinita', icon: Loader2 },
   ];
 
-  const disguises: { value: LinkDisguise; label: string; desc: string; icon: React.FC<{ size?: number }> }[] = [
+  const disguises: { value: LinkDisguise; label: string; desc: string; icon: LucideIcon }[] = [
     { value: 'none', label: 'Sin Camuflaje', desc: 'Vista previa normal', icon: Share2 },
     { value: 'pdf-doc', label: '📄 Documento PDF', desc: 'Documento_Oficial_Firmado_2026.pdf', icon: FileText },
     { value: 'bank-transfer', label: '💸 Transferencia $150k', desc: 'Comprobante de Pago Acreditado', icon: DollarSign },
