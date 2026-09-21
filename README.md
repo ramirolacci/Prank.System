@@ -3,9 +3,9 @@
 # 🎭 PrankForge v2.0
 ### *Laboratorio de Bromas Digitales e Interfaces Inmersivas*
 
-![React](https://img.shields.io/badge/React-18.x-blue?style=for-the-badge&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
-![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![Design](https://img.shields.io/badge/Design-Glassmorphism-purple?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-100%25_Inofensivo-emerald?style=for-the-badge)
 
