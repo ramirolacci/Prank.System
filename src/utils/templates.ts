@@ -38,7 +38,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'battery-explosion',
     name: 'Batería 98°C Overheat',
     description: 'Peligro de sobrecalentamiento crítico con medidor térmico y vibración.',
-    icon: '🔥',
+    icon: '🌡️🔥',
     config: {
       prankType: 'battery-explosion',
       title: '¡SOBRECALENTAMIENTO EXTREMO!',
@@ -63,7 +63,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'broken-glass',
     name: 'Pantalla Rota / Cristal',
     description: 'Simulador interactivo de fisura de cristal con sonido de crujido y tacto.',
-    icon: '🔨',
+    icon: '💥📱',
     config: {
       prankType: 'broken-glass',
       title: '⚠️ PANTALLA DAÑADA',
@@ -77,7 +77,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       showReveal: true,
       appTheme: 'dark',
       visualIntensity: 'medium',
-      accentColor: '#ffffff',
+      accentColor: '#38bdf8',
       soundEnabled: true,
       vibrationEnabled: true,
       escapeMode: 'stealth',
@@ -88,7 +88,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'whatsapp-hacked',
     name: 'WhatsApp Clonado',
     description: 'Aviso de sesión duplicada en Brasil y exportación de mensajes.',
-    icon: '💬',
+    icon: '💬🔐',
     config: {
       prankType: 'whatsapp-hacked',
       title: '¡NUEVO DISPOSITIVO VINCULADO!',
@@ -113,7 +113,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'win11-update',
     name: 'Actualización Windows 11',
     description: 'Simula una actualización eterna de Windows 11 con porcentaje cambiante.',
-    icon: '💻',
+    icon: '🪟🔄',
     config: {
       prankType: 'fake-update',
       title: 'Instalando actualizaciones del sistema',
@@ -138,7 +138,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'bsod',
     name: 'Pantalla Azul (BSOD)',
     description: 'La clásica pantalla azul de la muerte de Windows con código QR.',
-    icon: '🔵',
+    icon: '💀🖥️',
     config: {
       prankType: 'fake-error',
       title: 'CRITICAL_PROCESS_DIED',
@@ -163,7 +163,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'matrix-glitch',
     name: 'Invasión Hacker',
     description: 'Filtros de distorsión, terminal Cyberpunk y cursor loco.',
-    icon: '⚡',
+    icon: '👾⚡',
     config: {
       prankType: 'glitch',
       title: 'ALERTA DE SEGURIDAD: INTRUSIÓN',
@@ -188,7 +188,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
     id: 'free-ram',
     name: 'Descargar RAM Gratis',
     description: 'Barra de carga infinita con mensajes de optimización absurdos.',
-    icon: '🐏',
+    icon: '⚡💾',
     config: {
       prankType: 'loading',
       title: 'Descargando 64GB DDR5 RAM Gratis',
@@ -197,7 +197,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       duration: 12,
       theme: 'downloading-ram',
       fullscreen: true,
-      revealText: '¡Disfruta tu nueva memoria RAM mental! 🧠🐏',
+      revealText: '¡Disfruta tu nueva memoria RAM mental! 🧠⚡',
       targetName: '',
       showReveal: true,
       appTheme: 'retro',
