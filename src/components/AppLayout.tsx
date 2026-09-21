@@ -120,21 +120,6 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
           <p>
             Desarrollado con 💜. <strong>PrankForge</strong> es un simulador visual de código abierto.
           </p>
-          <div
-            style={{
-              display: 'flex',
-              gap: '1.5rem',
-              marginTop: '0.25rem',
-              fontSize: '0.72rem',
-              color: 'var(--text-dark)',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-            }}
-          >
-            <span>🔒 Sin servidor</span>
-            <span>💾 Datos locales</span>
-            <span>🎉 Confeti incluido</span>
-          </div>
         </div>
       </footer>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { PrankConfig, PrankType, EscapeMode, LinkDisguise } from '../types/prank';
+import { PrankConfig, PrankType, LinkDisguise } from '../types/prank';
 import { ResponsivePreviewWrapper } from './builder/ResponsivePreviewWrapper';
 import { SavedPranksPanel } from './history/SavedPranksPanel';
 import { ShareCard } from './builder/ShareCard';
@@ -127,7 +127,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
   };
 
   const handleOpenQrModal = () => {
-    const url = shareUrl || handleGenerateLink();
+    if (!shareUrl) handleGenerateLink();
     setShowQrModal(true);
   };
 
