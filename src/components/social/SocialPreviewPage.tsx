@@ -29,7 +29,7 @@ export const SocialPreviewPage: React.FC<SocialPreviewPageProps> = ({
           Inicio
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Flame size={18} style={{ color: 'var(--primary)' }} />
+          <span style={{ fontSize: '1.1rem', lineHeight: 1 }}>🎭</span>
           <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>Vista social</span>
         </div>
       </header>

@@ -41,20 +41,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, onNavigateHome }
             cursor: 'pointer',
           }}
         >
-          <div
-            style={{
-              background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 15px var(--primary-glow)',
-            }}
-          >
-            <Flame size={20} color="#fff" />
-          </div>
+          <span style={{ fontSize: '1.6rem', lineHeight: 1, userSelect: 'none' }}>🎭</span>
           <div>
             <h1
               style={{
