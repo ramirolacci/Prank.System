@@ -160,9 +160,7 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
         </div>
       )}
 
-      {!isPreview && showHint && config.fullscreen && !isFullscreen && (
-        <div className="fullscreen-hint">Tocá la pantalla para expandir (opcional)</div>
-      )}
+
 
       {!isRevealed && !isPreview && (
         <ExitButton onExit={handleExit} escapeMode={config.escapeMode ?? 'stealth'} />

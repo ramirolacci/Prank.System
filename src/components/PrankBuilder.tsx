@@ -471,7 +471,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
                     type="text"
                     value={config.targetName}
                     onChange={(e) => handleInputChange('targetName', e.target.value)}
-                    placeholder="Ej: Ramiro"
+                    placeholder="Ingresar nombre"
                     className="input-field"
                   />
                 </div>
