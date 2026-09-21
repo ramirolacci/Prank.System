@@ -506,6 +506,8 @@ body {
 
 .browser-mockup-mobile {
   aspect-ratio: 9/16;
+  max-height: 520px;
+  border-radius: 16px;
 }
 
 .browser-chrome {

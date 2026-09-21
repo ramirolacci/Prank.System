@@ -26,8 +26,6 @@ import {
   MessageSquare,
   Sparkles,
   Bookmark,
-  Volume2,
-  VolumeX,
   Vibrate,
   ShieldAlert,
   Flame,
@@ -218,58 +216,7 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             onEdit={handleEditHistory}
           />
 
-          {/* 1. Categoría de Broma */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass-card"
-            style={{ padding: '1.25rem' }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
-                1. Tipo de broma
-              </h4>
-              <button type="button" onClick={handleLoadExample} className="btn-ghost btn-sm">
-                <Sparkles size={14} />
-                Cargar ejemplo
-              </button>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
-              {categories.map((cat) => {
-                const Icon = cat.icon;
-                const isActive = config.prankType === cat.type;
-                return (
-                  <motion.button
-                    key={cat.type}
-                    type="button"
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => handleTypeChange(cat.type)}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      padding: '0.75rem 0.4rem',
-                      borderRadius: '10px',
-                      cursor: 'pointer',
-                      border: isActive ? '1px solid var(--primary)' : '1px solid var(--border)',
-                      background: isActive ? 'rgba(139, 92, 246, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                      color: isActive ? 'var(--text-main)' : 'var(--text-muted)',
-                      fontWeight: isActive ? 600 : 500,
-                      fontSize: '0.75rem',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <Icon size={18} style={{ color: isActive ? 'var(--primary)' : 'inherit' }} />
-                    <span>{cat.label}</span>
-                  </motion.button>
-                );
-              })}
-            </div>
-          </motion.div>
-
-          {/* 2. Personalización y Efectos */}
+          {/* Personalización y Efectos */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -277,34 +224,18 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             className="glass-card"
             style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
           >
-            <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
-              2. Personalizá la experiencia
-            </h4>
-
-            {/* Sound & Vibration Toggles */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-              <button
-                type="button"
-                onClick={() => handleInputChange('soundEnabled', !config.soundEnabled)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                  padding: '0.75rem',
-                  borderRadius: '10px',
-                  border: config.soundEnabled ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  background: config.soundEnabled ? 'rgba(139, 92, 246, 0.12)' : 'rgba(255, 255, 255, 0.02)',
-                  color: config.soundEnabled ? '#fff' : 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                {config.soundEnabled ? <Volume2 size={16} color="var(--accent)" /> : <VolumeX size={16} />}
-                <span>{config.soundEnabled ? 'Efectos de Audio ON' : 'Audio Mudo'}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
+                Personalizá la experiencia
+              </h4>
+              <button type="button" onClick={handleLoadExample} className="btn-ghost btn-sm">
+                <Sparkles size={14} />
+                Cargar ejemplo
               </button>
+            </div>
 
+            {/* Vibration Toggle */}
+            <div>
               <button
                 type="button"
                 onClick={() => handleInputChange('vibrationEnabled', !config.vibrationEnabled)}
@@ -321,10 +252,11 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
                   fontSize: '0.8rem',
                   fontWeight: 600,
                   cursor: 'pointer',
+                  width: '100%',
                 }}
               >
                 <Vibrate size={16} color={config.vibrationEnabled ? 'var(--accent)' : 'inherit'} />
-                <span>{config.vibrationEnabled ? 'Vibración Móvil ON' : 'Vibración OFF'}</span>
+                <span>{config.vibrationEnabled ? 'Vibración Táctil Móvil ON' : 'Vibración OFF'}</span>
               </button>
             </div>
 

@@ -30,7 +30,7 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
   useEffect(() => {
     const textInterval = setInterval(() => {
       setFunnyTextIndex((prev) => (prev + 1) % funnyMessages.length);
-    }, Math.max(1500, 4000 - intensity * 300)); // Higher intensity = faster text changes
+    }, Math.max(1500, 4000 - intensity * 300));
 
     return () => clearInterval(textInterval);
   }, [intensity]);
@@ -42,7 +42,6 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
         if (showReveal) onComplete();
       }, duration * 1000);
       
-      // Also advance a mock progress percentage
       const totalSteps = duration * 10;
       const stepIncrement = 100 / totalSteps;
       const progressInterval = setInterval(() => {
@@ -57,14 +56,12 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
         clearInterval(progressInterval);
       };
     } else {
-      // Infinite mode: slow mock progress that slows down near 99%
       const progressInterval = setInterval(() => {
         setPercent((prev) => {
           if (prev >= 98) return 98;
           return prev + Math.random() * 0.4;
         });
         
-        // Randomize download speed slightly for realistic look
         setDownloadSpeed((Math.random() * 3 + 2).toFixed(1) + ' MB/s');
       }, 500);
 
@@ -87,45 +84,45 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
             alignItems: 'center',
             cursor: isPreview ? 'default' : 'none',
             userSelect: 'none',
-            padding: '2rem',
+            padding: isPreview ? '0.75rem 0.5rem' : '2rem',
+            boxSizing: 'border-box',
           }}
         >
-          {/* Windows 98 Setup dialog */}
           <div
             style={{
-              width: '360px',
+              width: isPreview ? '260px' : '360px',
+              maxWidth: '95%',
               backgroundColor: '#c0c0c0',
               border: '3px solid',
               borderColor: '#ffffff #808080 #808080 #ffffff',
               boxShadow: '1px 1px 10px rgba(0,0,0,0.15)',
               padding: '6px',
+              boxSizing: 'border-box',
             }}
           >
-            {/* Title */}
             <div
               style={{
                 backgroundColor: '#000080',
                 color: '#ffffff',
                 padding: '4px 6px',
                 fontWeight: 'bold',
-                fontSize: '12px',
+                fontSize: '11px',
               }}
             >
               {title || 'Instalador de Componentes'}
             </div>
             
-            <div style={{ padding: '16px 12px' }}>
-              <div style={{ fontSize: '12px', marginBottom: '12px', lineHeight: 1.4 }}>
+            <div style={{ padding: '12px 10px' }}>
+              <div style={{ fontSize: '11px', marginBottom: '10px', lineHeight: 1.35 }}>
                 {message || 'Copiando archivos del sistema...'}
-                <div style={{ color: '#555555', marginTop: '6px', fontStyle: 'italic', height: '18px', overflow: 'hidden' }}>
+                <div style={{ color: '#555555', marginTop: '4px', fontStyle: 'italic', height: '16px', overflow: 'hidden' }}>
                   {funnyMessages[funnyTextIndex]}
                 </div>
               </div>
               
-              {/* Progress bar */}
               <div
                 style={{
-                  height: '20px',
+                  height: '18px',
                   backgroundColor: '#ffffff',
                   border: '2px solid',
                   borderColor: '#808080 #ffffff #ffffff #808080',
@@ -135,7 +132,6 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
                   padding: '2px',
                 }}
               >
-                {/* Segments container */}
                 <div
                   style={{
                     height: '100%',
@@ -145,7 +141,6 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
                   }}
                 ></div>
                 
-                {/* Text overlay */}
                 <div
                   style={{
                     position: 'absolute',
@@ -153,7 +148,7 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '11px',
+                    fontSize: '10px',
                     fontWeight: 'bold',
                     color: percent > 50 ? '#ffffff' : '#000000',
                     mixBlendMode: 'difference',
@@ -164,12 +159,12 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
               </div>
             </div>
             
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 8px 8px 0', gap: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 6px 6px 0' }}>
               <button
                 disabled
                 style={{
-                  padding: '3px 12px',
-                  fontSize: '11px',
+                  padding: '2px 10px',
+                  fontSize: '10px',
                   backgroundColor: '#c0c0c0',
                   color: '#808080',
                   border: '1.5px solid',
@@ -198,26 +193,27 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
             alignItems: 'center',
             cursor: isPreview ? 'default' : 'none',
             userSelect: 'none',
-            padding: '2rem',
+            padding: isPreview ? '0.75rem 0.5rem' : '2rem 1rem',
+            boxSizing: 'border-box',
           }}
         >
           <div
             className="glass-card"
             style={{
-              padding: '2.5rem',
+              padding: isPreview ? '1rem 0.85rem' : '2.25rem 1.5rem',
               maxWidth: '480px',
               width: '100%',
               textAlign: 'center',
               border: '1px solid rgba(6, 182, 212, 0.2)',
               boxShadow: '0 10px 40px rgba(0, 0, 0, 0.4)',
+              boxSizing: 'border-box',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-              {/* Spinner using modern HSL rotation */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: isPreview ? '0.75rem' : '1.25rem' }}>
               <div
                 style={{
-                  width: '56px',
-                  height: '56px',
+                  width: isPreview ? '40px' : '56px',
+                  height: isPreview ? '40px' : '56px',
                   borderRadius: '50%',
                   border: '3px dashed var(--accent)',
                   animation: `spin ${3 / (intensity / 5 + 0.5)}s infinite linear`,
@@ -225,15 +221,14 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
               ></div>
             </div>
             
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem', color: '#fff' }}>
+            <h3 style={{ fontSize: isPreview ? '1.05rem' : '1.25rem', fontWeight: 'bold', marginBottom: '0.4rem', color: '#fff' }}>
               {title || 'Descargando RAM Adicional'}
             </h3>
             
-            <p style={{ fontSize: '0.875rem', color: 'var(--accent)', fontWeight: 500, marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: isPreview ? '0.78rem' : '0.875rem', color: 'var(--accent)', fontWeight: 500, marginBottom: isPreview ? '0.75rem' : '1.25rem' }}>
               Velocidad: {downloadSpeed} | Restante: {Math.max(1, 100 - Math.floor(percent)) * 2.4} MB
             </p>
             
-            {/* Flat loading bar */}
             <div
               style={{
                 height: '8px',
@@ -241,7 +236,7 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
                 backgroundColor: 'rgba(255,255,255,0.05)',
                 borderRadius: '999px',
                 overflow: 'hidden',
-                marginBottom: '1rem',
+                marginBottom: isPreview ? '0.75rem' : '1rem',
               }}
             >
               <div
@@ -255,7 +250,7 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
               ></div>
             </div>
             
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', height: '20px', overflow: 'hidden' }}>
+            <div style={{ fontSize: isPreview ? '0.75rem' : '0.8rem', color: 'var(--text-muted)', height: '18px', overflow: 'hidden' }}>
               {funnyMessages[funnyTextIndex]}
             </div>
           </div>
@@ -278,33 +273,33 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
             alignItems: 'center',
             cursor: isPreview ? 'default' : 'none',
             userSelect: 'none',
-            padding: '2rem',
+            padding: isPreview ? '0.75rem 0.5rem' : '2rem 1rem',
+            boxSizing: 'border-box',
           }}
         >
           <div className="crt-overlay"></div>
           <div className="scanline"></div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem' }}>
-            {/* Large neon circular loader */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isPreview ? '1rem' : '2rem', width: '100%' }}>
             <div
               className="spinner"
               style={{
-                width: '64px',
-                height: '64px',
+                width: isPreview ? '44px' : '64px',
+                height: isPreview ? '44px' : '64px',
                 borderColor: 'rgba(139, 92, 246, 0.1)',
                 borderLeftColor: 'var(--primary)',
                 boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)',
               }}
             ></div>
             
-            <div style={{ textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', width: '100%' }}>
               <h2
                 className="text-glow"
                 style={{
-                  fontSize: '1.25rem',
+                  fontSize: isPreview ? '1.05rem' : '1.25rem',
                   fontWeight: 'normal',
                   color: 'var(--primary)',
-                  marginBottom: '1rem',
+                  marginBottom: '0.75rem',
                 }}
               >
                 {title || 'INICIALIZANDO PROTOCOLO'}
@@ -312,18 +307,20 @@ export const LoadingScreen: React.FC<ScreenProps> = ({ config, onComplete, isPre
               
               <div
                 style={{
-                  fontSize: '0.85rem',
+                  fontSize: isPreview ? '0.78rem' : '0.85rem',
                   color: 'var(--text-muted)',
                   background: 'rgba(139, 92, 246, 0.05)',
                   border: '1px solid rgba(139, 92, 246, 0.15)',
-                  padding: '0.75rem 1.5rem',
+                  padding: isPreview ? '0.5rem 1rem' : '0.75rem 1.5rem',
                   borderRadius: '8px',
                   maxWidth: '380px',
+                  width: '90%',
                   margin: '0 auto',
-                  height: '42px',
+                  height: isPreview ? '36px' : '42px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  boxSizing: 'border-box',
                 }}
               >
                 {message || funnyMessages[funnyTextIndex]}

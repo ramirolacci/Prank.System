@@ -64,9 +64,9 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
   // Spawn initial retro windows if theme is retro-alert
   useEffect(() => {
     if (theme === 'retro-alert' && popups.length === 0) {
-      setPopups([{ id: 1, x: 30, y: 30 }]);
+      setPopups([{ id: 1, x: 10, y: 15 }]);
     }
-  }, [theme]);
+  }, [theme, popups.length]);
 
   // Handler for retro alert "Aceptar" or close click
   const handleRetroClick = (e: React.MouseEvent) => {
@@ -75,16 +75,13 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
       playRetroErrorDing();
     }
     if (popups.length > 25) {
-      // If too many popups, auto-complete to reveal surprise
       if (showReveal) onComplete();
       return;
     }
     
-    // Spawn 2 new windows at random coordinates
     const newId1 = Date.now();
     const newId2 = Date.now() + 1;
-    
-    const randomRange = isPreview ? { x: 40, y: 40 } : { x: 75, y: 75 };
+    const randomRange = isPreview ? { x: 30, y: 30 } : { x: 60, y: 60 };
     
     const newPopups = [
       ...popups,
@@ -116,8 +113,9 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
             alignItems: 'center',
             fontFamily: '-apple-system, sans-serif',
             cursor: isPreview ? 'default' : 'none',
-            padding: '2rem',
+            padding: isPreview ? '1rem' : '2rem',
             userSelect: 'none',
+            boxSizing: 'border-box',
           }}
         >
           <div
@@ -125,40 +123,39 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
               backgroundColor: '#0a0a0a',
               border: '2px solid #3c3c3c',
               borderRadius: '8px',
-              padding: '2.5rem',
+              padding: isPreview ? '1.25rem' : '2.5rem',
               maxWidth: '560px',
               width: '100%',
               boxShadow: '0 10px 40px rgba(0,0,0,0.6)',
               textAlign: 'center',
+              boxSizing: 'border-box',
             }}
           >
-            {/* Power symbol */}
             <div
               style={{
-                width: '40px',
-                height: '40px',
+                width: isPreview ? '30px' : '40px',
+                height: isPreview ? '30px' : '40px',
                 borderRadius: '50%',
-                border: '2.5px solid #dedede',
+                border: '2px solid #dedede',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: '0 auto 1.5rem auto',
+                margin: '0 auto 1rem auto',
                 position: 'relative',
               }}
             >
-              <div style={{ width: '2.5px', height: '14px', backgroundColor: '#dedede', position: 'absolute', top: '2px' }}></div>
+              <div style={{ width: '2px', height: isPreview ? '10px' : '14px', backgroundColor: '#dedede', position: 'absolute', top: '2px' }}></div>
             </div>
             
-            <h4 style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff', marginBottom: '1rem' }}>
+            <h4 style={{ fontSize: isPreview ? '0.9rem' : '1rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.75rem' }}>
               {title || 'You need to restart your computer.'}
             </h4>
-            <p style={{ fontSize: '0.85rem', lineHeight: 1.6, color: '#bcbcbc', marginBottom: '1.25rem' }}>
+            <p style={{ fontSize: isPreview ? '0.78rem' : '0.85rem', lineHeight: 1.5, color: '#bcbcbc', marginBottom: '1rem' }}>
               {message || 'Hold down the Power button for several seconds or press the Restart button.'}
             </p>
             
-            <div style={{ borderTop: '1px solid #333', paddingTop: '1rem', marginTop: '1.5rem', fontSize: '0.72rem', color: '#888', lineHeight: 1.5 }}>
+            <div style={{ borderTop: '1px solid #333', paddingTop: '0.75rem', marginTop: '1rem', fontSize: '0.7rem', color: '#888', lineHeight: 1.4 }}>
               <p>Veuillez redémarrer votre ordinateur. Maintenez le bouton de démarrage enfoncé.</p>
-              <p style={{ marginTop: '0.5rem' }}>Bitte starten Sie den Computer neu. Halten Sie den Ein-/Ausschalter gedrückt.</p>
             </div>
           </div>
         </div>
@@ -179,16 +176,17 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
             alignItems: 'center',
             fontFamily: '"Outfit", sans-serif',
             cursor: 'default',
-            padding: '2rem',
+            padding: isPreview ? '1rem' : '2rem',
             textAlign: 'center',
+            boxSizing: 'border-box',
           }}
         >
-          <div className="jitter-effect" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <ShieldAlert size={80} color="#fca5a5" style={{ marginBottom: '1.5rem' }} />
-            <h2 style={{ fontSize: '2.25rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '0.5px' }}>
+          <div className="jitter-effect" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+            <ShieldAlert size={isPreview ? 44 : 80} color="#fca5a5" style={{ marginBottom: isPreview ? '0.85rem' : '1.5rem' }} />
+            <h2 style={{ fontSize: isPreview ? '1.3rem' : '2.25rem', fontWeight: 800, marginBottom: '0.75rem', letterSpacing: '0.5px', lineHeight: 1.25 }}>
               {title || '¡ACCESO NO AUTORIZADO DETECTADO!'}
             </h2>
-            <p style={{ fontSize: '1.15rem', maxWidth: '600px', opacity: 0.9, lineHeight: 1.6, marginBottom: '2rem' }}>
+            <p style={{ fontSize: isPreview ? '0.82rem' : '1.15rem', maxWidth: '600px', opacity: 0.9, lineHeight: 1.5, marginBottom: isPreview ? '1.25rem' : '2rem' }}>
               {message || 'El cortafuegos del sistema ha detectado un archivo malicioso infectando el sector de arranque de su disco primario C:.'}
             </p>
           </div>
@@ -196,19 +194,16 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
           <button
             onClick={showReveal ? onComplete : () => alert('Seguridad: Acción Bloqueada')}
             style={{
-              padding: '0.75rem 2.5rem',
+              padding: isPreview ? '0.6rem 1.5rem' : '0.75rem 2.5rem',
               borderRadius: '8px',
               backgroundColor: '#ffffff',
               color: '#991b1b',
               fontWeight: '700',
               border: 'none',
               cursor: 'pointer',
-              fontSize: '1rem',
+              fontSize: isPreview ? '0.8rem' : '1rem',
               boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-              transition: 'transform 0.15s ease',
             }}
-            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.95)')}
-            onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             DESINFECTAR EQUIPO
           </button>
@@ -221,13 +216,12 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: '#55aaaa', // Classic Windows 95 desktop teal
+            backgroundColor: '#55aaaa',
             fontFamily: '"MS Sans Serif", "Tahoma", sans-serif',
             overflow: 'hidden',
             cursor: 'default',
           }}
         >
-          {/* Render spawned popup windows */}
           {popups.map((popup) => (
             <div
               key={popup.id}
@@ -235,7 +229,8 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
                 position: 'absolute',
                 left: `${popup.x}%`,
                 top: `${popup.y}%`,
-                width: '320px',
+                width: isPreview ? '240px' : '320px',
+                maxWidth: '90%',
                 backgroundColor: '#c0c0c0',
                 border: '3px solid',
                 borderColor: '#ffffff #808080 #808080 #ffffff',
@@ -243,16 +238,16 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
                 zIndex: popup.id,
                 padding: '2px',
                 userSelect: 'none',
+                boxSizing: 'border-box',
               }}
             >
-              {/* Windows 98 Title bar */}
               <div
                 style={{
                   background: 'linear-gradient(90deg, #000080, #1084d0)',
                   color: '#ffffff',
                   padding: '4px 6px',
                   fontWeight: 'bold',
-                  fontSize: '12px',
+                  fontSize: '11px',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
@@ -274,19 +269,17 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                    paddingBottom: '2px',
                   }}
                 >
                   X
                 </button>
               </div>
 
-              {/* Alert Body */}
-              <div style={{ display: 'flex', gap: '12px', padding: '16px 12px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '10px', padding: '12px 10px', alignItems: 'center' }}>
                 <div
                   style={{
-                    width: '32px',
-                    height: '32px',
+                    width: '28px',
+                    height: '28px',
                     backgroundColor: '#ff0000',
                     borderRadius: '50%',
                     display: 'flex',
@@ -294,31 +287,30 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
                     justifyContent: 'center',
                     color: '#fff',
                     fontWeight: 'bold',
-                    fontSize: '22px',
+                    fontSize: '18px',
                     fontFamily: 'Courier New, monospace',
+                    flexShrink: 0,
                   }}
                 >
                   X
                 </div>
-                <div style={{ fontSize: '12px', color: '#000', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '11px', color: '#000', lineHeight: 1.35 }}>
                   {message || 'Se ha detectado un desbordamiento de pila en el registro 0x00FF8E. El sistema debe cerrarse.'}
                 </div>
               </div>
 
-              {/* Action buttons */}
-              <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', paddingBottom: '8px' }}>
                 <button
                   onClick={handleRetroClick}
                   style={{
-                    minWidth: '80px',
-                    padding: '4px 10px',
+                    minWidth: '70px',
+                    padding: '3px 8px',
                     backgroundColor: '#c0c0c0',
                     border: '2px solid',
                     borderColor: '#ffffff #555555 #555555 #ffffff',
                     color: '#000000',
-                    fontSize: '12px',
+                    fontSize: '11px',
                     cursor: 'pointer',
-                    outline: '1px dotted #555555',
                   }}
                 >
                   Aceptar
@@ -345,51 +337,78 @@ export const FakeErrorScreen: React.FC<ScreenProps> = ({ config, onComplete, isP
             fontFamily: '"Segoe UI Light", "Segoe UI", -apple-system, sans-serif',
             cursor: isPreview ? 'default' : 'none',
             userSelect: 'none',
-            padding: isPreview ? '1.5rem' : '4rem 6rem',
+            padding: isPreview ? '1.25rem 1rem' : '4rem 6rem',
             textAlign: 'left',
+            boxSizing: 'border-box',
           }}
         >
-          {/* Sad face */}
-          <div style={{ fontSize: isPreview ? '3rem' : '6rem', marginBottom: '1.5rem', fontWeight: 300 }}>
-            :(
-          </div>
-          
-          <h2 style={{ fontSize: isPreview ? '1.1rem' : '1.75rem', fontWeight: 300, maxWidth: '900px', lineHeight: 1.4, marginBottom: '2rem' }}>
-            {title || 'Se ha producido un problema en su dispositivo y necesita reiniciarse. Tan solo estamos recopilando información sobre el error y, después, se reiniciará.'}
+          <div style={{ fontSize: isPreview ? '4rem' : '8rem', lineHeight: 1, marginBottom: isPreview ? '0.75rem' : '1.5rem' }}>:(</div>
+          <h2
+            style={{
+              fontSize: isPreview ? '1rem' : '1.8rem',
+              fontWeight: 300,
+              lineHeight: 1.35,
+              maxWidth: '900px',
+              marginBottom: isPreview ? '1rem' : '2rem',
+            }}
+          >
+            {message ||
+              'Se ha producido un problema en su dispositivo y necesita reiniciarse. Estamos recopilando información sobre el error y después se reiniciará automáticamente.'}
           </h2>
-          
-          <div style={{ fontSize: isPreview ? '1rem' : '1.5rem', fontWeight: 300, marginBottom: '3rem' }}>
-            {progress}% completado
+          <div
+            style={{
+              fontSize: isPreview ? '1rem' : '1.8rem',
+              fontWeight: 400,
+              marginBottom: isPreview ? '1.25rem' : '2.5rem',
+            }}
+          >
+            <span>{progress}% completado</span>
           </div>
-          
-          {/* Footer details: QR Code and Stop Code */}
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginTop: 'auto', maxWidth: '800px' }}>
-            {/* Mock QR Code */}
+
+          <div style={{ display: 'flex', gap: isPreview ? '1rem' : '2rem', alignItems: 'center' }}>
             <div
               style={{
-                width: isPreview ? '50px' : '90px',
-                height: isPreview ? '50px' : '90px',
+                width: isPreview ? '64px' : '110px',
+                height: isPreview ? '64px' : '110px',
                 backgroundColor: '#ffffff',
-                padding: '4px',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(5, 1fr)',
-                gridTemplateRows: 'repeat(5, 1fr)',
-                gap: '2px',
+                padding: isPreview ? '4px' : '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
               }}
             >
-              {[...Array(25)].map((_, i) => {
-                // Generate a static mock QR look
-                const isBlack = (i % 3 === 0) || (i < 5) || (i > 20) || (i % 5 === 0) || (i === 12);
-                return (
-                  <div key={i} style={{ backgroundColor: isBlack ? '#000000' : '#ffffff' }}></div>
-                );
-              })}
+              {/* QR Mockup */}
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: '2px solid #000',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '2px',
+                  padding: '2px',
+                }}
+              >
+                <div style={{ backgroundColor: '#000' }}></div>
+                <div style={{ backgroundColor: '#fff' }}></div>
+                <div style={{ backgroundColor: '#000' }}></div>
+                <div style={{ backgroundColor: '#fff' }}></div>
+                <div style={{ backgroundColor: '#000' }}></div>
+                <div style={{ backgroundColor: '#fff' }}></div>
+                <div style={{ backgroundColor: '#000' }}></div>
+                <div style={{ backgroundColor: '#000' }}></div>
+                <div style={{ backgroundColor: '#000' }}></div>
+              </div>
             </div>
-            
-            <div style={{ fontSize: isPreview ? '0.75rem' : '0.9rem', lineHeight: 1.6, opacity: 0.9 }}>
-              <p style={{ fontWeight: 'bold' }}>Para obtener más información sobre este problema y posibles soluciones, visite https://windows.com/stopcode</p>
-              <p style={{ marginTop: '0.5rem' }}>Si llama a un técnico de soporte técnico, dele esta información:</p>
-              <p style={{ opacity: 0.8 }}>Código de parada: <span style={{ fontWeight: 'bold' }}>{message || 'CRITICAL_PROCESS_DIED'}</span></p>
+
+            <div style={{ fontSize: isPreview ? '0.68rem' : '0.85rem', lineHeight: 1.5, opacity: 0.9 }}>
+              <p style={{ marginBottom: '0.2rem' }}>Para obtener más información sobre este problema y posibles soluciones, visita:</p>
+              <p style={{ fontWeight: 'bold' }}>https://windows.com/stopcode</p>
+              <p style={{ marginTop: '0.4rem', opacity: 0.8 }}>
+                Si llamas a un técnico de soporte, dales esta información:
+              </p>
+              <p style={{ fontWeight: 'bold' }}>Código de detención: {title || 'CRITICAL_PROCESS_DIED'}</p>
             </div>
           </div>
         </div>

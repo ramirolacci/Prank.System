@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PrankConfig } from '../../types/prank';
 import { playGlassCrunch } from '../../utils/audio';
 import { vibrateGlassCrunch } from '../../utils/haptics';
@@ -18,16 +18,21 @@ interface CrackPoint {
 }
 
 export const BrokenGlassScreen: React.FC<ScreenProps> = ({ config, onComplete, isPreview = false }) => {
-  const { title, message, duration, showReveal, soundEnabled, vibrationEnabled } = config;
+  const { title, duration, showReveal, soundEnabled, vibrationEnabled } = config;
   const [cracks, setCracks] = useState<CrackPoint[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Initial central crack
   useEffect(() => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    const centerX = rect ? rect.width / 2 : 160;
+    const centerY = rect ? rect.height / 2 : 280;
+
     const initialCrack: CrackPoint = {
       id: Date.now(),
-      x: window.innerWidth / 2 || 200,
-      y: window.innerHeight / 2 || 300,
-      scale: 1.2,
+      x: centerX,
+      y: centerY,
+      scale: 1.1,
       rotation: 15,
     };
     setCracks([initialCrack]);
@@ -49,6 +54,10 @@ export const BrokenGlassScreen: React.FC<ScreenProps> = ({ config, onComplete, i
 
     if (!clientX && !clientY) return;
 
+    const rect = containerRef.current?.getBoundingClientRect();
+    const relX = rect ? clientX - rect.left : clientX;
+    const relY = rect ? clientY - rect.top : clientY;
+
     if (!isPreview) {
       if (soundEnabled) playGlassCrunch();
       if (vibrationEnabled) vibrateGlassCrunch();
@@ -56,8 +65,8 @@ export const BrokenGlassScreen: React.FC<ScreenProps> = ({ config, onComplete, i
 
     const newCrack: CrackPoint = {
       id: Date.now() + Math.random(),
-      x: clientX,
-      y: clientY,
+      x: relX,
+      y: relY,
       scale: 0.7 + Math.random() * 0.8,
       rotation: Math.floor(Math.random() * 360),
     };
@@ -81,6 +90,7 @@ export const BrokenGlassScreen: React.FC<ScreenProps> = ({ config, onComplete, i
 
   return (
     <div
+      ref={containerRef}
       onClick={handleTap}
       onTouchStart={handleTap}
       style={{
@@ -124,22 +134,26 @@ export const BrokenGlassScreen: React.FC<ScreenProps> = ({ config, onComplete, i
       <div
         style={{
           position: 'absolute',
-          bottom: '3rem',
+          bottom: isPreview ? '1rem' : '3rem',
           left: '50%',
           transform: 'translateX(-50%)',
           backgroundColor: 'rgba(0, 0, 0, 0.85)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           borderRadius: '999px',
-          padding: '0.6rem 1.5rem',
-          fontSize: '0.85rem',
+          padding: isPreview ? '0.4rem 1rem' : '0.6rem 1.5rem',
+          fontSize: isPreview ? '0.72rem' : '0.85rem',
           color: 'rgba(255, 255, 255, 0.9)',
           textAlign: 'center',
           backdropFilter: 'blur(10px)',
           zIndex: 10,
           pointerEvents: 'none',
+          maxWidth: '90%',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
       >
-        {title || '⚠️ PANTALLA DADAÑADA — TOCA PARA PROBAR INTEGRIDAD'}
+        {title || '⚠️ PANTALLA DAÑADA — TOCA PARA PROBAR INTEGRIDAD'}
       </div>
     </div>
   );

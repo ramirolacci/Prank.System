@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PrankConfig } from '../../types/prank';
-import { ShieldAlert, Smartphone, DownloadCloud, AlertTriangle } from 'lucide-react';
-import { playPulseBuzzer, playAlarmSiren } from '../../utils/audio';
+import { Smartphone, DownloadCloud } from 'lucide-react';
+import { playPulseBuzzer } from '../../utils/audio';
 import { vibrateErrorPulse } from '../../utils/haptics';
 
 interface ScreenProps {
@@ -64,9 +64,10 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem',
+        padding: isPreview ? '1rem 0.5rem' : '2rem 1rem',
         userSelect: 'none',
         overflow: 'hidden',
+        boxSizing: 'border-box',
       }}
     >
       {/* WhatsApp Green Top Header */}
@@ -76,7 +77,7 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
           top: 0,
           left: 0,
           right: 0,
-          height: '140px',
+          height: isPreview ? '80px' : '140px',
           backgroundColor: '#00a884',
           zIndex: 1,
         }}
@@ -90,52 +91,54 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
           backgroundColor: '#111b21',
           border: '1px solid rgba(255,255,255,0.1)',
           borderRadius: '16px',
-          padding: '2.5rem 1.75rem',
+          padding: isPreview ? '1rem 0.85rem' : '2.25rem 1.5rem',
           boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
           zIndex: 10,
           textAlign: 'center',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          boxSizing: 'border-box',
         }}
       >
         <div
           style={{
-            width: '64px',
-            height: '64px',
+            width: isPreview ? '44px' : '60px',
+            height: isPreview ? '44px' : '60px',
             borderRadius: '50%',
             backgroundColor: '#00a884',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '1.25rem',
+            marginBottom: isPreview ? '0.75rem' : '1.25rem',
             boxShadow: '0 0 20px rgba(0, 168, 132, 0.4)',
+            flexShrink: 0,
           }}
         >
-          <Smartphone size={32} color="#fff" />
+          <Smartphone size={isPreview ? 22 : 30} color="#fff" />
         </div>
 
         <span
           style={{
             backgroundColor: '#ea580c',
             color: '#fff',
-            fontSize: '0.72rem',
+            fontSize: isPreview ? '0.65rem' : '0.72rem',
             fontWeight: 800,
-            letterSpacing: '1px',
-            padding: '4px 12px',
+            letterSpacing: '0.5px',
+            padding: '3px 10px',
             borderRadius: '999px',
-            marginBottom: '1rem',
+            marginBottom: isPreview ? '0.5rem' : '0.85rem',
             textTransform: 'uppercase',
           }}
         >
           WHATSAPP WEB — SESIÓN CLONADA
         </span>
 
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem', color: '#ffffff' }}>
+        <h2 style={{ fontSize: isPreview ? '1.1rem' : '1.4rem', fontWeight: 700, marginBottom: '0.5rem', color: '#ffffff', lineHeight: 1.25 }}>
           {title || '¡NUEVO DISPOSITIVO VINCULADO!'}
         </h2>
 
-        <p style={{ fontSize: '0.9rem', color: '#8696a0', lineHeight: 1.5, marginBottom: '1.5rem' }}>
+        <p style={{ fontSize: isPreview ? '0.78rem' : '0.88rem', color: '#8696a0', lineHeight: 1.4, marginBottom: isPreview ? '0.85rem' : '1.25rem' }}>
           {message ||
             'Se ha iniciado sesión desde una IP desconocida en San Pablo, Brasil. Exportando historial completo de chats y archivos multimedia...'}
         </p>
@@ -145,15 +148,16 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
           style={{
             width: '100%',
             backgroundColor: '#202c33',
-            borderRadius: '12px',
-            padding: '1.25rem',
-            marginBottom: '1.5rem',
+            borderRadius: '10px',
+            padding: isPreview ? '0.75rem' : '1rem',
+            marginBottom: isPreview ? '0.85rem' : '1.25rem',
             textAlign: 'left',
+            boxSizing: 'border-box',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-            <span style={{ color: '#8696a0', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <DownloadCloud size={14} color="#00a884" />
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: isPreview ? '0.75rem' : '0.82rem' }}>
+            <span style={{ color: '#8696a0', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              <DownloadCloud size={isPreview ? 12 : 14} color="#00a884" />
               Exportando mensajes...
             </span>
             <span style={{ color: '#00a884', fontWeight: 'bold' }}>{progress}%</span>
@@ -162,7 +166,7 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
           <div
             style={{
               width: '100%',
-              height: '8px',
+              height: '7px',
               backgroundColor: '#111b21',
               borderRadius: '999px',
               overflow: 'hidden',
@@ -183,12 +187,12 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
           onClick={showReveal ? onComplete : () => alert('Error: La vinculación remota no se puede detener desde este equipo.')}
           style={{
             width: '100%',
-            padding: '0.9rem',
-            borderRadius: '10px',
+            padding: isPreview ? '0.65rem' : '0.85rem',
+            borderRadius: '8px',
             backgroundColor: '#00a884',
             color: '#111b21',
             fontWeight: 800,
-            fontSize: '0.95rem',
+            fontSize: isPreview ? '0.8rem' : '0.9rem',
             border: 'none',
             cursor: 'pointer',
             boxShadow: '0 4px 15px rgba(0, 168, 132, 0.3)',

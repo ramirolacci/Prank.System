@@ -45,7 +45,7 @@ export const ResponsivePreviewWrapper: React.FC<ResponsivePreviewWrapperProps> =
       <div
         className={`browser-mockup ${isMobile ? 'browser-mockup-mobile' : ''}`}
         style={{
-          maxWidth: isMobile ? '320px' : '100%',
+          maxWidth: isMobile ? '330px' : '100%',
           margin: isMobile ? '0 auto' : undefined,
         }}
       >

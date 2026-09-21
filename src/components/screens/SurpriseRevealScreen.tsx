@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { PrankConfig } from '../../types/prank';
-import confetti from 'canvas-confetti';
 import { Laugh, ArrowRight } from 'lucide-react';
 
 interface ScreenProps {
@@ -10,30 +9,6 @@ interface ScreenProps {
 
 export const SurpriseRevealScreen: React.FC<ScreenProps> = ({ config, onExit }) => {
   const { revealText, targetName } = config;
-
-  useEffect(() => {
-    // Fire confetti bursts on mount
-    const end = Date.now() + 3 * 1000;
-
-    const interval = setInterval(() => {
-      if (Date.now() > end) {
-        return clearInterval(interval);
-      }
-
-      confetti({
-        startVelocity: 30,
-        spread: 360,
-        ticks: 60,
-        origin: {
-          x: Math.random(),
-          // since particles fall down, animate slightly above the bottom
-          y: Math.random() - 0.2,
-        },
-      });
-    }, 200);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div
@@ -48,9 +23,10 @@ export const SurpriseRevealScreen: React.FC<ScreenProps> = ({ config, onExit }) 
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily: '"Outfit", sans-serif',
-        padding: '2rem',
+        padding: '1.5rem 1rem',
         textAlign: 'center',
         overflow: 'hidden',
+        boxSizing: 'border-box',
       }}
     >
       {/* Decorative backdrop glow */}
@@ -70,7 +46,7 @@ export const SurpriseRevealScreen: React.FC<ScreenProps> = ({ config, onExit }) 
       <div
         className="glass-card"
         style={{
-          padding: '3rem 2rem',
+          padding: '2rem 1.25rem',
           maxWidth: '560px',
           width: '100%',
           border: '1px solid var(--border-active)',
@@ -79,112 +55,87 @@ export const SurpriseRevealScreen: React.FC<ScreenProps> = ({ config, onExit }) 
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '1.5rem',
+          gap: '1.25rem',
+          boxSizing: 'border-box',
         }}
       >
         <div
           style={{
             background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-            width: '64px',
-            height: '64px',
+            width: '56px',
+            height: '56px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             boxShadow: '0 0 20px var(--primary-glow)',
             animation: 'bounce 2s infinite',
+            flexShrink: 0,
           }}
         >
-          <Laugh size={32} color="#fff" />
+          <Laugh size={28} color="#fff" />
         </div>
 
-        <div>
-          <h2
-            className="text-glow"
+        {targetName && (
+          <span
             style={{
-              fontSize: '2rem',
-              fontWeight: 800,
-              background: 'linear-gradient(135deg, #ffffff 30%, var(--accent) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '0.5rem',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              color: 'var(--accent)',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
+              padding: '0.2rem 0.75rem',
+              borderRadius: '999px',
+              background: 'rgba(6, 182, 212, 0.1)',
+              border: '1px solid rgba(6, 182, 212, 0.2)',
             }}
           >
-            {targetName ? `¡Caíste, ${targetName}! 😜` : '¡Te la creíste! 😜'}
-          </h2>
-          <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>
-            Broma de PrankForge finalizada
+            Para: {targetName}
           </span>
-        </div>
+        )}
+
+        <h2
+          style={{
+            fontSize: '1.6rem',
+            fontWeight: 800,
+            background: 'linear-gradient(to right, #ffffff, var(--text-muted))',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            margin: 0,
+            lineHeight: 1.25,
+          }}
+        >
+          ¡ES UNA BROMA! 😂
+        </h2>
 
         <p
           style={{
-            fontSize: '1.15rem',
-            lineHeight: 1.6,
-            color: '#e5e7eb',
-            margin: '0.5rem 0',
+            fontSize: '1rem',
+            color: 'var(--text-main)',
+            lineHeight: 1.5,
+            margin: 0,
           }}
         >
-          {revealText || '¡Todo lo que viste en pantalla fue solo una simulación interactiva súper segura! Tu equipo está 100% perfecto.'}
+          {revealText || 'Tranquilo/a, tu dispositivo está 100% a salvo.'}
         </p>
 
-        <div style={{ height: '1px', width: '100%', backgroundColor: 'var(--border)', margin: '0.5rem 0' }}></div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', width: '100%' }}>
-          <button
-            onClick={onExit}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              padding: '0.8rem 1.5rem',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, var(--primary), var(--primary-hover))',
-              color: '#ffffff',
-              fontWeight: 600,
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 15px var(--primary-glow)',
-              transition: 'transform 0.1s ease',
-            }}
-            onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.98)')}
-            onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-          >
-            <span>Crear mi propia broma</span>
-            <ArrowRight size={16} />
-          </button>
-          
-          <button
-            onClick={onExit}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              padding: '0.8rem 1.5rem',
-              borderRadius: '10px',
-              backgroundColor: 'transparent',
-              color: 'var(--text-main)',
-              fontWeight: 500,
-              border: '1px solid var(--border)',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.03)')}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-          >
-            <span>Ir al Inicio</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={onExit}
+          className="btn-primary"
+          style={{
+            marginTop: '0.5rem',
+            padding: '0.75rem 1.75rem',
+            fontSize: '0.9rem',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+          }}
+        >
+          <span>Volver al inicio</span>
+          <ArrowRight size={16} />
+        </button>
       </div>
-
-      <style>{`
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
     </div>
   );
 };

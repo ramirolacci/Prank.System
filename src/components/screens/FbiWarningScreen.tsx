@@ -13,7 +13,7 @@ interface ScreenProps {
 export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, isPreview = false }) => {
   const { title, message, duration, showReveal, soundEnabled, vibrationEnabled } = config;
   const [secondsLeft, setSecondsLeft] = useState(duration > 0 ? duration : 300);
-  const [userIp, setUserIp] = useState('190.210.45.122');
+  const [userIp] = useState('190.210.45.122');
 
   // Trigger audio siren & vibration on start
   useEffect(() => {
@@ -62,11 +62,12 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '2rem',
+        padding: isPreview ? '0.75rem 0.5rem' : '2rem 1rem',
         overflow: 'hidden',
         userSelect: 'none',
-        border: '12px solid #dc2626',
+        border: isPreview ? '4px solid #dc2626' : '12px solid #dc2626',
         animation: 'borderFlash 1s infinite alternate',
+        boxSizing: 'border-box',
       }}
     >
       <div
@@ -77,19 +78,20 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
           backgroundColor: 'rgba(20, 5, 5, 0.92)',
           border: '2px solid #ef4444',
           borderRadius: '16px',
-          padding: '2.5rem',
+          padding: isPreview ? '1rem 0.85rem' : '2.5rem 1.5rem',
           textAlign: 'center',
           boxShadow: '0 0 50px rgba(239, 68, 68, 0.4)',
           position: 'relative',
           zIndex: 10,
+          boxSizing: 'border-box',
         }}
       >
         {/* FBI / Police Seal Badge Header */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: isPreview ? '0.6rem' : '1.25rem' }}>
           <div
             style={{
-              width: '80px',
-              height: '80px',
+              width: isPreview ? '48px' : '80px',
+              height: isPreview ? '48px' : '80px',
               borderRadius: '50%',
               backgroundColor: '#991b1b',
               border: '3px solid #fca5a5',
@@ -97,9 +99,10 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 0 20px rgba(239, 68, 68, 0.6)',
+              flexShrink: 0,
             }}
           >
-            <ShieldAlert size={44} color="#ffffff" />
+            <ShieldAlert size={isPreview ? 26 : 44} color="#ffffff" />
           </div>
         </div>
 
@@ -108,9 +111,9 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
             backgroundColor: '#dc2626',
             color: '#fff',
             fontWeight: 800,
-            fontSize: '0.75rem',
-            letterSpacing: '2px',
-            padding: '4px 14px',
+            fontSize: isPreview ? '0.65rem' : '0.75rem',
+            letterSpacing: '1px',
+            padding: '3px 10px',
             borderRadius: '999px',
             textTransform: 'uppercase',
           }}
@@ -120,18 +123,18 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
 
         <h2
           style={{
-            fontSize: '1.8rem',
+            fontSize: isPreview ? '1.15rem' : '1.8rem',
             fontWeight: 900,
             color: '#ffffff',
-            marginTop: '1.25rem',
-            marginBottom: '0.75rem',
-            lineHeight: 1.3,
+            marginTop: isPreview ? '0.6rem' : '1.25rem',
+            marginBottom: isPreview ? '0.4rem' : '0.75rem',
+            lineHeight: 1.25,
           }}
         >
           {title || '¡DISPOSITIVO BLOQUEADO POR LA POLICÍA NACIONAL!'}
         </h2>
 
-        <p style={{ color: '#fca5a5', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+        <p style={{ color: '#fca5a5', fontSize: isPreview ? '0.78rem' : '0.95rem', lineHeight: 1.4, marginBottom: isPreview ? '0.75rem' : '1.5rem' }}>
           {message ||
             'Se ha detectado actividad sospechosa y tráfico de archivos maliciosos no autorizados proveniente de esta conexión.'}
         </p>
@@ -142,13 +145,14 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
             backgroundColor: 'rgba(0, 0, 0, 0.6)',
             border: '1px solid rgba(239, 68, 68, 0.3)',
             borderRadius: '10px',
-            padding: '1rem 1.5rem',
-            marginBottom: '1.5rem',
-            fontSize: '0.85rem',
+            padding: isPreview ? '0.5rem 0.75rem' : '1rem 1.5rem',
+            marginBottom: isPreview ? '0.75rem' : '1.5rem',
+            fontSize: isPreview ? '0.72rem' : '0.85rem',
             textAlign: 'left',
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '0.75rem',
+            gap: '0.4rem 0.75rem',
+            boxSizing: 'border-box',
           }}
         >
           <div>
@@ -156,15 +160,15 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
             <div style={{ color: '#fff', fontWeight: 'bold' }}>{userIp}</div>
           </div>
           <div>
-            <span style={{ color: '#888' }}>ESTADO DEL DISPOSITIVO:</span>
-            <div style={{ color: '#ef4444', fontWeight: 'bold' }}>INCAUTADO / BLOQUEADO</div>
+            <span style={{ color: '#888' }}>ESTADO:</span>
+            <div style={{ color: '#ef4444', fontWeight: 'bold' }}>INCAUTADO</div>
           </div>
           <div>
-            <span style={{ color: '#888' }}>CÓDIGO DE EXPEDIENTE:</span>
-            <div style={{ color: '#fff', fontWeight: 'bold' }}>#FED-99482-CYBER</div>
+            <span style={{ color: '#888' }}>EXPEDIENTE:</span>
+            <div style={{ color: '#fff', fontWeight: 'bold' }}>#FED-99482</div>
           </div>
           <div>
-            <span style={{ color: '#888' }}>UBICACIÓN REGISTRADA:</span>
+            <span style={{ color: '#888' }}>UBICACIÓN:</span>
             <div style={{ color: '#fff', fontWeight: 'bold' }}>LOCAL DETECTADO</div>
           </div>
         </div>
@@ -173,50 +177,52 @@ export const FbiWarningScreen: React.FC<ScreenProps> = ({ config, onComplete, is
         <div
           style={{
             backgroundColor: '#7f1d1d',
-            borderRadius: '12px',
-            padding: '1rem',
-            marginBottom: '1.5rem',
+            borderRadius: '10px',
+            padding: isPreview ? '0.5rem' : '1rem',
+            marginBottom: isPreview ? '0.75rem' : '1.5rem',
             border: '1px solid #f87171',
           }}
         >
-          <div style={{ fontSize: '0.8rem', color: '#fecaca', fontWeight: 600, textTransform: 'uppercase' }}>
-            TIEMPO RESTANTE ANTES DE BLOQUEO PERMANENTE DE DISCO:
+          <div style={{ fontSize: isPreview ? '0.68rem' : '0.78rem', color: '#fca5a5', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            TIEMPO RESTANTE PARA PAGO DE MULTA FEDERAL:
           </div>
-          <div style={{ fontSize: '2.5rem', fontWeight: 900, color: '#ffffff', fontFamily: 'monospace', letterSpacing: '2px' }}>
+          <div
+            style={{
+              fontSize: isPreview ? '1.5rem' : '2.5rem',
+              fontWeight: 900,
+              color: '#ffffff',
+              fontFamily: 'monospace',
+              letterSpacing: '2px',
+              marginTop: '0.2rem',
+            }}
+          >
             {formatTime(secondsLeft)}
           </div>
         </div>
 
         <button
-          onClick={showReveal ? onComplete : () => alert('Acceso denegado: El dispositivo está bajo supervisión.')}
+          onClick={showReveal ? onComplete : () => alert('Policía Federal: Trámite de multa bloqueado por orden judicial.')}
           style={{
             width: '100%',
-            padding: '1rem',
-            borderRadius: '10px',
-            backgroundColor: '#ef4444',
+            padding: isPreview ? '0.65rem' : '0.9rem',
+            borderRadius: '8px',
+            backgroundColor: '#dc2626',
             color: '#ffffff',
             fontWeight: 800,
-            fontSize: '1rem',
+            fontSize: isPreview ? '0.8rem' : '0.95rem',
             border: 'none',
             cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(239, 68, 68, 0.5)',
+            boxShadow: '0 4px 15px rgba(220, 38, 38, 0.4)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '0.5rem',
           }}
         >
-          <Lock size={18} />
-          <span>PAGAR MULTA DE DESBLOQUEO ($250 USD)</span>
+          <Lock size={isPreview ? 14 : 18} />
+          <span>ABONAR MULTA DE EMERGENCIA ($500 USD)</span>
         </button>
       </div>
-
-      <style>{`
-        @keyframes borderFlash {
-          0% { border-color: #dc2626; }
-          100% { border-color: #1e3a8a; }
-        }
-      `}</style>
     </div>
   );
 };

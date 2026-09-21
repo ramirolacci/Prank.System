@@ -10,7 +10,7 @@ const BASE_DEFAULTS = {
   appTheme: 'dark' as const,
   visualIntensity: 'medium' as const,
   accentColor: '#8b5cf6',
-  soundEnabled: true,
+  soundEnabled: false,
   vibrationEnabled: true,
   escapeMode: 'stealth' as const,
   linkDisguise: 'none' as const,
