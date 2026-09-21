@@ -55,6 +55,7 @@ export const PRANK_EXAMPLES: Record<PrankType, Omit<PrankConfig, 'prankType'>> =
     theme: 'fbi-red',
     intensity: 8,
     linkDisguise: 'pdf-doc',
+    location: 'Buenos Aires, Argentina',
     revealText: '¡Tranqui! Tu dispositivo está 100% libre de multas 🚔😂',
   },
   'whatsapp-hacked': {

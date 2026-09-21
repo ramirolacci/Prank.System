@@ -38,6 +38,7 @@ import {
   DollarSign,
   Gift,
   Share2,
+  MapPin,
   LucideIcon,
 } from 'lucide-react';
 
@@ -163,8 +164,6 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
 
   const categories = [
     { type: 'fbi-warning' as PrankType, label: 'Alerta FBI', icon: ShieldAlert },
-    { type: 'battery-explosion' as PrankType, label: 'Batería 98°C', icon: Flame },
-    { type: 'broken-glass' as PrankType, label: 'Cristal Roto', icon: Hammer },
     { type: 'whatsapp-hacked' as PrankType, label: 'WhatsApp Hack', icon: Smartphone },
     { type: 'fake-update' as PrankType, label: 'Actualización', icon: Laptop },
     { type: 'fake-error' as PrankType, label: 'Error BSOD', icon: AlertOctagon },
@@ -391,6 +390,20 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
               />
             </div>
 
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <MapPin size={14} color="var(--accent)" />
+                Ubicación de la víctima
+              </label>
+              <input
+                type="text"
+                value={config.location || ''}
+                onChange={(e) => handleInputChange('location', e.target.value)}
+                placeholder="Ej: Buenos Aires, Argentina (o Local Detectado)"
+                className="input-field"
+              />
+            </div>
+
             <IntensitySlider
               intensity={config.intensity}
               visualIntensity={config.visualIntensity}
@@ -421,6 +434,10 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
               onChange={(v) => handleInputChange('fullscreen', v)}
             />
           </motion.div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <ResponsivePreviewWrapper config={config} />
 
           {/* 3. Remate Sorpresa */}
           <motion.div
@@ -509,8 +526,6 @@ export const PrankBuilder: React.FC<PrankBuilderProps> = ({
             }
           />
         </div>
-
-        <ResponsivePreviewWrapper config={config} />
       </div>
     </div>
   );

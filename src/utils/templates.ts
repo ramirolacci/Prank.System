@@ -32,6 +32,7 @@ export const PRANK_TEMPLATES: PrankTemplate[] = [
       vibrationEnabled: true,
       escapeMode: 'stealth',
       linkDisguise: 'pdf-doc',
+      location: 'Buenos Aires, Argentina',
     },
   },
 

@@ -34,6 +34,7 @@ export interface PrankConfig {
   vibrationEnabled: boolean;
   escapeMode: EscapeMode;
   linkDisguise: LinkDisguise;
+  location?: string;
 }
 
 export const PRANK_TYPE_LABELS: Record<PrankType, string> = {
