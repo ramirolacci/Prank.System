@@ -124,7 +124,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onCreatePrank, history
             }}
           >
             <Sparkles size={14} />
-            <span>8 Plantillas listas</span>
+            <span>6 Plantillas listas</span>
           </motion.div>
         </div>
 

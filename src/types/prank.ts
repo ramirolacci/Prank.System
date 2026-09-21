@@ -5,8 +5,6 @@ export type PrankType =
   | 'loading'
   | 'surprise-reveal'
   | 'fbi-warning'
-  | 'battery-explosion'
-  | 'broken-glass'
   | 'whatsapp-hacked';
 
 export type AppTheme = 'dark' | 'neon' | 'terminal' | 'retro' | 'minimal';
@@ -45,8 +43,5 @@ export const PRANK_TYPE_LABELS: Record<PrankType, string> = {
   'loading': 'Carga infinita',
   'surprise-reveal': 'Revelación sorpresa',
   'fbi-warning': 'Alerta FBI / Policial',
-  'battery-explosion': 'Batería 98°C / Peligro',
-  'broken-glass': 'Pantalla Rota / Cristal',
   'whatsapp-hacked': 'WhatsApp Clonado / Hack',
 };
-

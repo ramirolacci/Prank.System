@@ -57,23 +57,6 @@ export const PRANK_EXAMPLES: Record<PrankType, Omit<PrankConfig, 'prankType'>> =
     linkDisguise: 'pdf-doc',
     revealText: '¡Tranqui! Tu dispositivo está 100% libre de multas 🚔😂',
   },
-  'battery-explosion': {
-    ...BASE_DEFAULTS,
-    title: '¡SOBRECALENTAMIENTO EXTREMO!',
-    message: 'La temperatura interna del procesador ha alcanzado 98°C.',
-    theme: 'thermal-red',
-    intensity: 9,
-    linkDisguise: 'giveaway',
-    revealText: '¡Tu batería está fría y saludable! Puro susto ❄️📱',
-  },
-  'broken-glass': {
-    ...BASE_DEFAULTS,
-    title: '⚠️ PANTALLA DAÑADA',
-    message: 'Fisura física detectada en el panel táctil.',
-    theme: 'glass-crack',
-    intensity: 7,
-    revealText: '¡Tu pantalla no tiene un solo rasguño! ✨📱',
-  },
   'whatsapp-hacked': {
     ...BASE_DEFAULTS,
     title: '¡NUEVO DISPOSITIVO VINCULADO!',
@@ -109,8 +92,6 @@ export function getRandomTemplateConfig(): PrankConfig {
     'glitch',
     'loading',
     'fbi-warning',
-    'battery-explosion',
-    'broken-glass',
     'whatsapp-hacked',
   ];
   const randomType = types[Math.floor(Math.random() * types.length)];

@@ -7,8 +7,6 @@ import { GlitchScreen } from './screens/GlitchScreen';
 import { LoadingScreen } from './screens/LoadingScreen';
 import { SurpriseRevealScreen } from './screens/SurpriseRevealScreen';
 import { FbiWarningScreen } from './screens/FbiWarningScreen';
-import { BatteryExplosionScreen } from './screens/BatteryExplosionScreen';
-import { BrokenGlassScreen } from './screens/BrokenGlassScreen';
 import { WhatsAppHackedScreen } from './screens/WhatsAppHackedScreen';
 import { getAppThemeClass } from '../utils/themes';
 import { initAudio } from '../utils/audio';
@@ -122,10 +120,6 @@ export const PrankRuntime: React.FC<PrankRuntimeProps> = ({
         return <LoadingScreen {...props} />;
       case 'fbi-warning':
         return <FbiWarningScreen {...props} />;
-      case 'battery-explosion':
-        return <BatteryExplosionScreen {...props} />;
-      case 'broken-glass':
-        return <BrokenGlassScreen {...props} />;
       case 'whatsapp-hacked':
         return <WhatsAppHackedScreen {...props} />;
       case 'surprise-reveal':
