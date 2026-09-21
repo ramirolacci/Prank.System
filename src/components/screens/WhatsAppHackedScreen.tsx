@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PrankConfig } from '../../types/prank';
-import { Smartphone, DownloadCloud } from 'lucide-react';
+import { Smartphone, ShieldAlert, Monitor, MapPin, Clock, MessageSquare, Image, Mic, AlertTriangle } from 'lucide-react';
 import { playPulseBuzzer } from '../../utils/audio';
 import { vibrateErrorPulse } from '../../utils/haptics';
 
@@ -11,8 +11,13 @@ interface ScreenProps {
 }
 
 export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete, isPreview = false }) => {
-  const { title, message, duration, showReveal, soundEnabled, vibrationEnabled } = config;
-  const [progress, setProgress] = useState(12);
+  const { title, message, duration, showReveal, soundEnabled, vibrationEnabled, location, targetName } = config;
+  const [progress, setProgress] = useState(14);
+  const [syncedMessages, setSyncedMessages] = useState(1420);
+  const [syncedPhotos, setSyncedPhotos] = useState(384);
+  const [syncedAudios, setSyncedAudios] = useState(96);
+
+  const victimLocation = location?.trim() ? location : 'San Pablo, Brasil (IP: 189.210.45.99)';
 
   // Audio and vibration on mount
   useEffect(() => {
@@ -27,7 +32,7 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
     }
   }, [isPreview, soundEnabled, vibrationEnabled]);
 
-  // Export progress simulation
+  // Sync counters simulation
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -35,9 +40,12 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
           clearInterval(interval);
           return 99;
         }
-        return prev + Math.floor(Math.random() * 8) + 2;
+        return prev + Math.floor(Math.random() * 6) + 2;
       });
-    }, 600);
+      setSyncedMessages((prev) => prev + Math.floor(Math.random() * 45) + 12);
+      setSyncedPhotos((prev) => prev + Math.floor(Math.random() * 12) + 3);
+      setSyncedAudios((prev) => prev + Math.floor(Math.random() * 5) + 1);
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);
@@ -59,108 +67,189 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
         inset: 0,
         backgroundColor: '#0b141a',
         color: '#e9edef',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isPreview ? '1rem 0.5rem' : '2rem 1rem',
+        padding: isPreview ? '0.5rem' : '1.5rem 1rem',
         userSelect: 'none',
         overflow: 'hidden',
         boxSizing: 'border-box',
       }}
     >
-      {/* WhatsApp Green Top Header */}
+      {/* Official WhatsApp Top Header Bar */}
       <div
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: isPreview ? '80px' : '140px',
-          backgroundColor: '#00a884',
+          height: isPreview ? '50px' : '90px',
+          backgroundColor: '#202c33',
+          borderBottom: '1px solid #2a3942',
+          display: 'flex',
+          alignItems: 'center',
+          padding: isPreview ? '0 1rem' : '0 2rem',
           zIndex: 1,
         }}
-      ></div>
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div
+            style={{
+              width: isPreview ? '24px' : '36px',
+              height: isPreview ? '24px' : '36px',
+              borderRadius: '50%',
+              backgroundColor: '#00a884',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <ShieldAlert size={isPreview ? 14 : 20} color="#111b21" />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: isPreview ? '0.82rem' : '1rem', color: '#e9edef' }}>
+              WhatsApp Security Center
+            </div>
+            <div style={{ fontSize: isPreview ? '0.62rem' : '0.75rem', color: '#8696a0' }}>
+              Aviso del sistema de protección de cuenta
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div
         className="glass-card"
         style={{
-          maxWidth: '480px',
+          maxWidth: '520px',
           width: '100%',
           backgroundColor: '#111b21',
-          border: '1px solid rgba(255,255,255,0.1)',
+          border: '1.5px solid #2a3942',
           borderRadius: '16px',
-          padding: isPreview ? '1rem 0.85rem' : '2.25rem 1.5rem',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+          padding: isPreview ? '0.85rem 0.85rem' : '2.25rem 1.75rem',
+          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
           zIndex: 10,
           textAlign: 'center',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           boxSizing: 'border-box',
+          marginTop: isPreview ? '1rem' : '1.5rem',
         }}
       >
+        {/* Device Icon Header */}
         <div
           style={{
-            width: isPreview ? '44px' : '60px',
-            height: isPreview ? '44px' : '60px',
+            width: isPreview ? '46px' : '68px',
+            height: isPreview ? '46px' : '68px',
             borderRadius: '50%',
-            backgroundColor: '#00a884',
+            backgroundColor: 'rgba(234, 88, 12, 0.15)',
+            border: '2px solid #f97316',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: isPreview ? '0.75rem' : '1.25rem',
-            boxShadow: '0 0 20px rgba(0, 168, 132, 0.4)',
+            marginBottom: isPreview ? '0.5rem' : '1rem',
+            boxShadow: '0 0 25px rgba(249, 115, 22, 0.3)',
             flexShrink: 0,
           }}
         >
-          <Smartphone size={isPreview ? 22 : 30} color="#fff" />
+          <Smartphone size={isPreview ? 24 : 34} color="#f97316" />
         </div>
 
-        <span
+        <div
           style={{
             backgroundColor: '#ea580c',
-            color: '#fff',
-            fontSize: isPreview ? '0.65rem' : '0.72rem',
+            color: '#ffffff',
+            fontSize: isPreview ? '0.6rem' : '0.72rem',
             fontWeight: 800,
-            letterSpacing: '0.5px',
-            padding: '3px 10px',
-            borderRadius: '999px',
-            marginBottom: isPreview ? '0.5rem' : '0.85rem',
+            letterSpacing: '1px',
+            padding: '3px 12px',
+            borderRadius: '4px',
+            marginBottom: isPreview ? '0.4rem' : '0.75rem',
             textTransform: 'uppercase',
           }}
         >
-          WHATSAPP WEB — SESIÓN CLONADA
-        </span>
+          ALERTA DE SEGURIDAD CRÍTICA — SESIÓN DUPLICADA
+        </div>
 
-        <h2 style={{ fontSize: isPreview ? '1.1rem' : '1.4rem', fontWeight: 700, marginBottom: '0.5rem', color: '#ffffff', lineHeight: 1.25 }}>
+        <h2 style={{ fontSize: isPreview ? '1.05rem' : '1.5rem', fontWeight: 800, marginBottom: '0.35rem', color: '#ffffff', lineHeight: 1.25 }}>
           {title || '¡NUEVO DISPOSITIVO VINCULADO!'}
         </h2>
 
-        <p style={{ fontSize: isPreview ? '0.78rem' : '0.88rem', color: '#8696a0', lineHeight: 1.4, marginBottom: isPreview ? '0.85rem' : '1.25rem' }}>
+        {targetName && (
+          <div style={{ color: '#00a884', fontWeight: 700, fontSize: isPreview ? '0.75rem' : '0.9rem', marginBottom: '0.35rem' }}>
+            CUENTA DE WHATSAPP: {targetName.toUpperCase()}
+          </div>
+        )}
+
+        <p style={{ fontSize: isPreview ? '0.72rem' : '0.86rem', color: '#8696a0', lineHeight: 1.4, marginBottom: isPreview ? '0.65rem' : '1.15rem' }}>
           {message ||
-            'Se ha iniciado sesión desde una IP desconocida en San Pablo, Brasil. Exportando historial completo de chats y archivos multimedia...'}
+            'Se detectó un nuevo inicio de sesión en tu cuenta. Se está sincronizando el historial completo de mensajes y multimedia.'}
         </p>
 
-        {/* Export Progress Bar */}
+        {/* Realistic Connection Details Card */}
         <div
           style={{
             width: '100%',
             backgroundColor: '#202c33',
+            border: '1px solid #2a3942',
             borderRadius: '10px',
-            padding: isPreview ? '0.75rem' : '1rem',
-            marginBottom: isPreview ? '0.85rem' : '1.25rem',
+            padding: isPreview ? '0.5rem 0.75rem' : '0.85rem 1.15rem',
+            marginBottom: isPreview ? '0.65rem' : '1.15rem',
+            fontSize: isPreview ? '0.68rem' : '0.82rem',
+            textAlign: 'left',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: isPreview ? '0.3rem 0.5rem' : '0.5rem 0.85rem',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div>
+            <span style={{ color: '#8696a0', fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <Monitor size={11} /> DISPOSITIVO REMOTO:
+            </span>
+            <div style={{ color: '#ffffff', fontWeight: 700 }}>WhatsApp Web / macOS</div>
+          </div>
+
+          <div>
+            <span style={{ color: '#8696a0', fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <MapPin size={11} /> UBICACIÓN:
+            </span>
+            <div style={{ color: '#f97316', fontWeight: 700 }}>{victimLocation}</div>
+          </div>
+
+          <div>
+            <span style={{ color: '#8696a0', fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              <Clock size={11} /> HORA DE ACCESO:
+            </span>
+            <div style={{ color: '#ffffff', fontWeight: 700 }}>Hace 1 min (14:34hs)</div>
+          </div>
+
+          <div>
+            <span style={{ color: '#8696a0', fontSize: '0.68rem' }}>ESTADO DE CIFRADO:</span>
+            <div style={{ color: '#ef4444', fontWeight: 700 }}>⚠️ CLAVE CAMBIADA</div>
+          </div>
+        </div>
+
+        {/* Live Export Progress Box */}
+        <div
+          style={{
+            width: '100%',
+            backgroundColor: '#182229',
+            border: '1px solid rgba(0, 168, 132, 0.3)',
+            borderRadius: '10px',
+            padding: isPreview ? '0.55rem' : '0.9rem',
+            marginBottom: isPreview ? '0.65rem' : '1.15rem',
             textAlign: 'left',
             boxSizing: 'border-box',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: isPreview ? '0.75rem' : '0.82rem' }}>
-            <span style={{ color: '#8696a0', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <DownloadCloud size={isPreview ? 12 : 14} color="#00a884" />
-              Exportando mensajes...
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem', fontSize: isPreview ? '0.7rem' : '0.82rem' }}>
+            <span style={{ color: '#00a884', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              <ShieldAlert size={isPreview ? 12 : 14} /> Sincronizando respaldo remoto...
             </span>
-            <span style={{ color: '#00a884', fontWeight: 'bold' }}>{progress}%</span>
+            <span style={{ color: '#00a884', fontWeight: 800 }}>{progress}%</span>
           </div>
 
           <div
@@ -170,6 +259,7 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
               backgroundColor: '#111b21',
               borderRadius: '999px',
               overflow: 'hidden',
+              marginBottom: isPreview ? '0.4rem' : '0.65rem',
             }}
           >
             <div
@@ -181,26 +271,56 @@ export const WhatsAppHackedScreen: React.FC<ScreenProps> = ({ config, onComplete
               }}
             ></div>
           </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              gap: '0.25rem',
+              fontSize: isPreview ? '0.6rem' : '0.72rem',
+              color: '#8696a0',
+              textAlign: 'center',
+            }}
+          >
+            <div>
+              <MessageSquare size={isPreview ? 10 : 12} style={{ display: 'inline', marginRight: '3px' }} color="#00a884" />
+              <strong style={{ color: '#fff' }}>{syncedMessages}</strong> msgs
+            </div>
+            <div>
+              <Image size={isPreview ? 10 : 12} style={{ display: 'inline', marginRight: '3px' }} color="#00a884" />
+              <strong style={{ color: '#fff' }}>{syncedPhotos}</strong> fotos
+            </div>
+            <div>
+              <Mic size={isPreview ? 10 : 12} style={{ display: 'inline', marginRight: '3px' }} color="#00a884" />
+              <strong style={{ color: '#fff' }}>{syncedAudios}</strong> audios
+            </div>
+          </div>
         </div>
 
         <button
-          onClick={showReveal ? onComplete : () => alert('Error: La vinculación remota no se puede detener desde este equipo.')}
+          onClick={showReveal ? onComplete : () => alert('WhatsApp Security: La desvinculación remota requiere código SMS de confirmación.')}
           style={{
             width: '100%',
-            padding: isPreview ? '0.65rem' : '0.85rem',
+            padding: isPreview ? '0.55rem' : '0.85rem',
             borderRadius: '8px',
             backgroundColor: '#00a884',
             color: '#111b21',
             fontWeight: 800,
-            fontSize: isPreview ? '0.8rem' : '0.9rem',
+            fontSize: isPreview ? '0.78rem' : '0.9rem',
             border: 'none',
             cursor: 'pointer',
-            boxShadow: '0 4px 15px rgba(0, 168, 132, 0.3)',
+            boxShadow: '0 4px 18px rgba(0, 168, 132, 0.4)',
+            letterSpacing: '0.3px',
           }}
         >
-          DESVINCULAR SESIÓN REMOTA YA
+          CERRAR SESIÓN EN TODOS LOS DISPOSITIVOS
         </button>
+
+        <div style={{ marginTop: isPreview ? '0.4rem' : '0.75rem', fontSize: isPreview ? '0.58rem' : '0.7rem', color: '#667781' }}>
+          🔒 WhatsApp LLC — Notificación de Seguridad y Privacidad
+        </div>
       </div>
     </div>
   );
 };
+
